@@ -8,7 +8,6 @@ class Entity
     this.maxForce = maxForce;
     this.position = position;
     this.velocity = velocity;
-    this.target = target;
     this.behavior = behavior;
 
     this.behavior.setContext(this);
@@ -38,16 +37,6 @@ class Entity
   getPosition()
   {
     return this.position;
-  }
-
-  setTarget(t)
-  {
-    return this.target = t;
-  }
-
-  getTarget()
-  {
-    return this.target;
   }
 
   setVelocity(v)
