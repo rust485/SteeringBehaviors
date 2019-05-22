@@ -1,17 +1,17 @@
 class Behavior
 {
-  constructor(ctx=undefined)
+  constructor(ctx=null)
   {
-    this.context = ctx;
+    this.ctx = ctx;
   }
 
   setContext(ctx)
   {
-    return this.context = ctx;
+    return this.ctx = ctx;
   }
 
   update()
   {
-    return this.context;
+    return this.ctx;
   }
 }

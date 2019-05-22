@@ -15,6 +15,16 @@ class Vector
 		this.y = y;
 	}
 
+	getX()
+	{
+		return this.x;
+	}
+
+	getY()
+	{
+		return this.y;
+	}
+
 	/**
 	 * Calculate the magnitude of this vector
 	 * @method magnitude
@@ -192,5 +202,48 @@ class Vector
 		this.normalize();
 		this.scale(mag);
 		return this;
+	}
+
+	limit(l)
+	{
+		if (this.magnitude() > l)
+			this.setMagnitude(l);
+
+		return this;
+	}
+
+	/**
+	 * Returns a new vector resulting from the subtraction of v2 from v1, without
+	 * altering either v1 or v2.
+	 * @method subtract
+	 * @param  {Vector} v1 vector to subtract from
+	 * @param  {Vector} v2 vector to subtract
+	 * @return {Vector}    the resulting vector produced by v1 - v2
+	 */
+	static subtract(v1, v2)
+	{
+		const v = v1.clone();
+
+		return v.subtract(v2);
+	}
+
+	/**
+	 * Returns a new vector resulting from the addition of v2 from v1, without
+	 * altering either v1 or v2.
+	 * @method add
+	 * @param  {Vector} v1 vector to add to
+	 * @param  {Vector} v2 vector to add
+	 * @return {Vector}    the resulting vector produced by v1 + v2
+	 */
+	static add(v1, v2)
+	{
+		const v = v1.clone();
+
+		return v.add(v2);
+	}
+
+	clone()
+	{
+		return new Vector(this.x, this.y);
 	}
 }
