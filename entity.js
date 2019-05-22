@@ -2,7 +2,7 @@ const DEFAULT_R = 10;
 
 class Entity
 {
-  constructor(maxSpeed, maxForce, position, velocity, mass=1, behavior)
+  constructor(maxSpeed, maxForce, position, velocity, mass=1, behavior=undefined)
   {
     this.maxSpeed = maxSpeed;
     this.maxForce = maxForce; // essentially max acceleration
@@ -14,6 +14,32 @@ class Entity
 
     this.behavior = behavior;
     this.behavior.setContext(this);
+    this.tags = [];
+  }
+
+  getTags()
+  {
+    return this.tags;
+  }
+
+  containsTag(tag)
+  {
+    return this.tags.indexOf(tag) !== -1;
+  }
+
+  addTags(tags)
+  {
+    return this.tags = this.tags.concat(tags);
+  }
+
+  removeTag(tag)
+  {
+    const newTags = [];
+    for (let i = 0; i < this.tags.length; i++)
+      if (this.tags[i] !== tag)
+        newTags.push(this.tags[i]);
+
+    return this.tags = newTags;
   }
 
   update()
@@ -49,6 +75,8 @@ class Entity
 
   updateVelocity(v)
   {
+    v.limit(this.maxForce)
+      .scale(1 / this.mass);
     // perform vector addition, then cap the velocity
     // by max speed of this entity
     return this.velocity.add(v).limit(this.maxSpeed);

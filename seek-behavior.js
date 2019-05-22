@@ -18,9 +18,7 @@ class SeekBehavior extends Behavior
     const desiredVelocity = targetPos.subtract(this.ctx.getPosition())
       .setMagnitude(this.ctx.getMaxSpeed());
 
-    const steering = Vector.subtract(desiredVelocity, this.ctx.getVelocity())
-      .limit(this.ctx.getMaxForce())
-      .scale(1 / this.ctx.getMass());
+    const steering = Vector.subtract(desiredVelocity, this.ctx.getVelocity());
 
     this.ctx.updateVelocity(steering);
     this.ctx.move();

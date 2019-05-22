@@ -1,6 +1,6 @@
 const CANVAS_WIDTH = 800;
 const CANVAS_HEIGHT = 800;
-
+const PLAYER_TAG = 'player';
 
 let fps = 60;
 const engine = new Engine();
@@ -13,7 +13,7 @@ function setup()
 	frameRate(fps);
 
   const player = ControlledEntityFactory.createEntity();
-  console.log(player);
+	player.addTag(PLAYER_TAG);
   engine.addEntity(player);
 }
 
