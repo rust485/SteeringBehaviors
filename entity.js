@@ -127,8 +127,17 @@ class Entity
 
   render()
   {
+    const front = new Vector(5, 0);
+    const bl = new Vector(-5, -5); // back left
+    const br = new Vector(-5, 5); // back right
+
+    push();
     fill(1000);
-    ellipse(this.position.x, this.position.y, DEFAULT_R, DEFAULT_R);
+    translate(this.position.x, this.position.y);
+    rotate(this.velocity.angleFromOrigin());
+    triangle(front.x, front.y, bl.x, bl.y, br.x, br.y);
+    pop();
+    // ellipse(this.position.x, this.position.y, DEFAULT_R, DEFAULT_R);
   }
 
   getX()
@@ -148,6 +157,8 @@ class Entity
   getStoppingDistance()
   {
     // might add some fancier math here later
-    return this.maxSpeed * 2;
+    const dist = 1.75 * this.maxSpeed / this.maxForce;
+
+    return dist;
   }
 }

@@ -22,9 +22,7 @@ class SeekBehavior extends Behavior
     const distToTarget = Vector.subtract(targetPos, this.ctx.getPosition()).magnitude();
 
     if (distToTarget <= stoppingDistance)
-    {
       desiredVelocity.setMagnitude(this.ctx.maxSpeed * distToTarget / stoppingDistance);
-    }
 
 
     const steering = Vector.subtract(desiredVelocity, this.ctx.getVelocity());

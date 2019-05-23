@@ -71,15 +71,17 @@ class EntityFactory
     const behavior = new SeekBehavior();
 
     const pos = Vector.generatePointWithinRect(minBounds, maxBounds);
+    const speed = Math.random() * 3 + 1;
+    const force = Math.random();
 
-    return this.createEntityWithBehavior(pos, behavior);
+    return this.createEntityWithBehavior(pos, behavior, speed, force);
   }
 
-  createEntityWithBehavior(pos, behavior)
+  createEntityWithBehavior(pos, behavior, speed=this.maxSpeed, force=this.maxForce)
   {
     const vel = new Vector(0, 0);
 
-    return new Entity(this.maxSpeed, this.maxForce, pos, vel,
+    return new Entity(speed, force, pos, vel,
       this.mass, behavior)
   }
 }

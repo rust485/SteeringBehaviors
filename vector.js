@@ -193,6 +193,11 @@ class Vector
 		return this;
 	}
 
+	angleFromOrigin()
+	{
+		return Math.acos(this.x / (Math.sqrt(this.x * this.x + this.y * this.y)));
+	}
+
 	/**
 	 * Sets the magnitude to the specified value
 	 * @method setMagnitude
