@@ -15,6 +15,8 @@ class Engine
 
   addEntity(e)
   {
+    if (e.id === undefined)
+      e.id = this.generateId();
     return this.entities.addEntity(e);
   }
 
@@ -23,9 +25,12 @@ class Engine
     return this.entities.removeEntityById(id);
   }
 
-  getEntities()
+  getEntities(tag=undefined)
   {
-    return this.entities.toArray();
+    if (tag === undefined)
+      return this.entities.toArray();
+
+    return this.entities.toArray().filter(e => e.containsTag(tag));
   }
 
   generateId()

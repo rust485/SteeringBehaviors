@@ -1,19 +1,18 @@
 class SeekBehavior extends Behavior
 {
-  constructor(ctx, target=null)
+  constructor(ctx)
   {
     super(ctx);
-    this.target = target;
   }
 
   update()
   {
     super.update();
-    if (this.ctx === null || this.target === null)
+    if (this.ctx === null || this.ctx.getTarget() === null)
       return;
 
     // allows for transparency, target could either be a Vector, or an entity.
-    const targetPos = new Vector(this.target.getX(), this.target.getY());
+    const targetPos = new Vector(this.ctx.getTarget().getX(), this.ctx.getTarget().getY());
 
     const desiredVelocity = targetPos.subtract(this.ctx.getPosition())
       .setMagnitude(this.ctx.getMaxSpeed());
@@ -23,16 +22,6 @@ class SeekBehavior extends Behavior
     this.ctx.updateVelocity(steering);
     this.ctx.move();
     return this.ctx;
-  }
-
-  setTarget(t)
-  {
-    return this.target = t;
-  }
-
-  getTarget()
-  {
-    return this.target;
   }
 
   getStoppingDistance()

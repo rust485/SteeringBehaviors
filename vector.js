@@ -246,4 +246,14 @@ class Vector
 	{
 		return new Vector(this.x, this.y);
 	}
+
+	static generatePointWithinRect(min, max)
+	{
+		const delta = Vector.subtract(max, min);
+
+		const x = Math.random() * delta.x + min.x;
+		const y = Math.random() * delta.y + min.y;
+
+		return new Vector(x, y);
+	}
 }

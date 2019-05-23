@@ -2,7 +2,7 @@ const DEFAULT_R = 10;
 
 class Entity
 {
-  constructor(maxSpeed, maxForce, position, velocity, mass=1, behavior=undefined)
+  constructor(maxSpeed, maxForce, position, velocity, mass=1, behavior=new Behavior(), target=undefined)
   {
     this.maxSpeed = maxSpeed;
     this.maxForce = maxForce; // essentially max acceleration
@@ -14,7 +14,10 @@ class Entity
 
     this.behavior = behavior;
     this.behavior.setContext(this);
+
     this.tags = [];
+
+    this.target = target;
   }
 
   getTags()
@@ -56,6 +59,16 @@ class Entity
   {
     this.behavior = b;
     return this.behavior.setContext(this);
+  }
+
+  setTarget(t)
+  {
+    return this.target = t;
+  }
+
+  getTarget()
+  {
+    return this.target;
   }
 
   getBehavior()

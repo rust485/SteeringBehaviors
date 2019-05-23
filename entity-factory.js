@@ -8,16 +8,78 @@ class EntityFactory
     this.mass = mass;
   }
 
-  static createEntity()
+  setBounds(bx, by)
   {
-    const pos = new Vector(Math.random() * this.bound.x,
-      Math.random() * this.bound.y);
+    this.bounds = new Vector(bx, by);
+  }
 
-    const vel = new Vector(0, 0);
+  getBounds()
+  {
+    return this.bounds;
+  }
 
+  setMaxSpeed(ms)
+  {
+    this.maxSpeed = ms;
+  }
+
+  getMaxSpeed()
+  {
+    return this.maxSpeed;
+  }
+
+  setMaxForce(mf)
+  {
+    this.maxForce = mf;
+  }
+
+  getMaxForce()
+  {
+    return this.maxForce;
+  }
+
+  setMass(m)
+  {
+    this.mass = m;
+  }
+
+  getMass()
+  {
+    return this.mass;
+  }
+
+  createBehaviorlessEntity(minBounds, maxBounds)
+  {
     const behavior = new Behavior();
 
+    const pos = Vector.generatePointWithinRect(minBounds, maxBounds);
+
+    return this.createEntityWithBehavior(pos, behavior);
+  }
+
+  createControlledEntity(minBounds, maxBounds)
+  {
+    const behavior = new ControlledBehavior();
+
+    const pos = Vector.generatePointWithinRect(minBounds, maxBounds);
+
+    return this.createEntityWithBehavior(pos, behavior);
+  }
+
+  createSeekingEntity(minBounds, maxBounds)
+  {
+    const behavior = new SeekBehavior();
+
+    const pos = Vector.generatePointWithinRect(minBounds, maxBounds);
+
+    return this.createEntityWithBehavior(pos, behavior);
+  }
+
+  createEntityWithBehavior(pos, behavior)
+  {
+    const vel = new Vector(0, 0);
+
     return new Entity(this.maxSpeed, this.maxForce, pos, vel,
-      this.mass, behavior);
+      this.mass, behavior)
   }
 }
