@@ -145,10 +145,9 @@ class Entity
     return this.position.getY();
   }
 
-  getStoppingDistance(friction=0.4, gravAccel=9.8)
+  getStoppingDistance()
   {
-    const v = this.velocity.magnitude();
-    const vSq = v * v;
-    return vSq / (2 * friction * gravAccel)
+    // might add some fancier math here later
+    return this.maxSpeed * 2;
   }
 }

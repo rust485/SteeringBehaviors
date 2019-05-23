@@ -14,21 +14,23 @@ class SeekBehavior extends Behavior
     // allows for transparency, target could either be a Vector, or an entity.
     const targetPos = new Vector(this.ctx.getTarget().getX(), this.ctx.getTarget().getY());
 
-    const desiredVelocity = targetPos.subtract(this.ctx.getPosition())
+    const desiredVelocity = Vector.subtract(targetPos, this.ctx.getPosition())
       .setMagnitude(this.ctx.getMaxSpeed());
+
+
+    const stoppingDistance = this.ctx.getStoppingDistance();
+    const distToTarget = Vector.subtract(targetPos, this.ctx.getPosition()).magnitude();
+
+    if (distToTarget <= stoppingDistance)
+    {
+      desiredVelocity.setMagnitude(this.ctx.maxSpeed * distToTarget / stoppingDistance);
+    }
+
 
     const steering = Vector.subtract(desiredVelocity, this.ctx.getVelocity());
 
     this.ctx.updateVelocity(steering);
     this.ctx.move();
     return this.ctx;
-  }
-
-  getStoppingDistance()
-  {
-    if (this.ctx !== null)
-      return this.ctx.getStoppingDistance();
-
-    return undefined;
   }
 }
