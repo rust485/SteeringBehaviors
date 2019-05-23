@@ -14,9 +14,4 @@ class Behavior
   {
     return this.ctx;
   }
-
-  setTarget()
-  {
-    return undefined;
-  }
 }

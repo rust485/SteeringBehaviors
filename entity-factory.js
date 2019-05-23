@@ -66,15 +66,31 @@ class EntityFactory
     return this.createEntityWithBehavior(pos, behavior);
   }
 
-  createSeekingEntity(minBounds, maxBounds)
+  createMouseControlledEntity(minBounds, maxBounds)
+  {
+    const behavior = new SeekBehavior();
+    behavior.setTarget(mouse);
+    const pos = Vector.generatePointWithinRect(minBounds, maxBounds);
+
+    return this.createEntityWithBehavior(pos, behavior);
+  }
+
+  createSeekingEntity(minBounds, maxBounds, options={})
   {
     const behavior = new SeekBehavior();
 
-    const pos = Vector.generatePointWithinRect(minBounds, maxBounds);
-    const speed = Math.random() * 3 + 1;
-    const force = Math.random();
+    const pos = (options.position !== undefined) ?
+      options.position : Vector.generatePointWithinRect(minBounds, maxBounds);
+    const speed = (options.speed !== undefined) ?
+      options.speed : Math.random() * 3 + 1;
+    const force = (options.force !== undefined) ?
+      options.force : Math.random();
 
-    return this.createEntityWithBehavior(pos, behavior, speed, force);
+    const e = this.createEntityWithBehavior(pos, behavior, speed, force);
+
+    if (options.target !== undefined) e.setTarget(options.target);
+
+    return e;
   }
 
   createEntityWithBehavior(pos, behavior, speed=this.maxSpeed, force=this.maxForce)

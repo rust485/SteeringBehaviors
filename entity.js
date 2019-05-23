@@ -1,4 +1,4 @@
-const DEFAULT_R = 10;
+const D = 5;
 
 class Entity
 {
@@ -12,12 +12,15 @@ class Entity
 
     this.mass = mass;
 
+    console.log(behavior);
     this.behavior = behavior;
     this.behavior.setContext(this);
 
     this.tags = [];
 
     this.target = target;
+
+    this.forward = new Vector(1, 0);
   }
 
   getTags()
@@ -90,9 +93,15 @@ class Entity
   {
     v.limit(this.maxForce)
       .scale(1 / this.mass);
+
     // perform vector addition, then cap the velocity
     // by max speed of this entity
-    return this.velocity.add(v).limit(this.maxSpeed);
+    this.velocity.add(v).limit(this.maxSpeed);
+
+    if (this.velocity.magnitude() !== 0)
+      this.forward = this.velocity.clone().normalize();
+
+    return this.velocity;
   }
 
   setVelocity(v)
@@ -127,17 +136,8 @@ class Entity
 
   render()
   {
-    const front = new Vector(5, 0);
-    const bl = new Vector(-5, -5); // back left
-    const br = new Vector(-5, 5); // back right
-
-    push();
-    fill(1000);
-    translate(this.position.x, this.position.y);
-    rotate(this.velocity.angleFromOrigin());
-    triangle(front.x, front.y, bl.x, bl.y, br.x, br.y);
-    pop();
-    // ellipse(this.position.x, this.position.y, DEFAULT_R, DEFAULT_R);
+    return DisplayUtils.drawTriangle(this.position,
+      this.forward.angleFromOrigin(), D);
   }
 
   getX()

@@ -195,7 +195,9 @@ class Vector
 
 	angleFromOrigin()
 	{
-		return Math.acos(this.x / (Math.sqrt(this.x * this.x + this.y * this.y)));
+		const signY = (this.y !== 0) ? this.y / Math.abs(this.y) :
+			1;
+		return signY * Math.acos(this.x / this.magnitude());
 	}
 
 	/**
