@@ -17,8 +17,6 @@ function setup()
 	createCanvas(CANVAS_WIDTH, CANVAS_HEIGHT);
 	frameRate(fps);
 
-	mouse.setPosition(mouseX, mouseY);
-
   // const player = factory.createControlledEntity(MIN_BOUND, MAX_BOUND);
   const player = factory.createSeekingEntity(MIN_BOUND, MAX_BOUND,
 		{ target: mouse, maxSpeed: 5.0 });
@@ -36,6 +34,7 @@ function mousePressed()
 
 	entity.setPosition(new Vector(mouseX, mouseY));
 	entity.setTarget(engine.getEntities(PLAYER_TAG)[0]);
+	entity.getBehavior().setTarget(entity.getTarget());
 	engine.addEntity(entity);
 }
 
@@ -43,5 +42,5 @@ function draw()
 {
   engine.update();
   engine.render();
-	mouse.setPosition(mouseX, mouseY);
+	mouse.update();
 }

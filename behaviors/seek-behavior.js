@@ -1,18 +1,30 @@
 class SeekBehavior extends Behavior
 {
-  constructor(ctx)
+  constructor(ctx, target=null)
   {
     super(ctx);
+    this.target = target;
+  }
+
+  getTarget()
+  {
+    return this.target;
+  }
+
+  setTarget(target)
+  {
+    this.target = target;
   }
 
   update()
   {
     super.update();
-    if (this.ctx === null || this.ctx.getTarget() === null)
+
+    if (this.ctx === null || this.target === null)
       return;
 
     // allows for transparency, target could either be a Vector, or an entity.
-    const targetPos = new Vector(this.ctx.getTarget().getX(), this.ctx.getTarget().getY());
+    const targetPos = new Vector(this.target.getX(), this.target.getY());
 
     const desiredVelocity = Vector.subtract(targetPos, this.ctx.getPosition())
       .setMagnitude(this.ctx.getMaxSpeed());

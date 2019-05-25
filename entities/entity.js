@@ -161,4 +161,16 @@ class Entity
 
     return dist;
   }
+
+  predictPosition(frames)
+  {
+    if (frames <= 0)
+      return this.position;
+
+    const v = this.velocity.clone();
+    v.scale(frames);
+
+    return Vector.add(v,
+      this.position);
+  }
 }
