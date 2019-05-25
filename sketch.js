@@ -32,8 +32,8 @@ function mousePressed()
 {
 	const entity = factory.createSeekingEntity(MIN_BOUND, MAX_BOUND);
 
-	entity.setPosition(new Vector(mouseX, mouseY));
 	entity.setTarget(engine.getEntities(PLAYER_TAG)[0]);
+
 	entity.getBehavior().setTarget(entity.getTarget());
 	engine.addEntity(entity);
 }

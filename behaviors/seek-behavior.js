@@ -3,6 +3,9 @@ class SeekBehavior extends Behavior
   constructor(ctx, target=null)
   {
     super(ctx);
+
+    // the behavior also has a target, the target of the entity
+    // is more of a storage for the main target of the entity
     this.target = target;
   }
 
@@ -13,7 +16,7 @@ class SeekBehavior extends Behavior
 
   setTarget(target)
   {
-    this.target = target;
+    return this.target = target;
   }
 
   update()

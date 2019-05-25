@@ -100,4 +100,23 @@ class EntityFactory
     return new Entity(speed, force, pos, vel,
       this.mass, behavior)
   }
+
+  createFleeingEntity(minBounds, maxBounds, options={})
+  {
+    const behavior = new FleeBehavior();
+
+    const pos = (options.position !== undefined) ?
+      options.position : Vector.generatePointWithinRect(minBounds, maxBounds);
+    const speed = (options.speed !== undefined) ?
+      options.speed : Math.random() * 3 + 1;
+    const force = (options.force !== undefined) ?
+      options.force : Math.random();
+
+    const e = this.createEntityWithBehavior(pos, behavior, speed, force);
+
+    if (options.avoid !== undefined) behavior.setAvoid(options.avoid);
+    if (options.target !== undefined) e.setTarget(options.target);
+
+    return e;
+  }
 }
