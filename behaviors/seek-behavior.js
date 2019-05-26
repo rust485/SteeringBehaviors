@@ -7,6 +7,7 @@ class SeekBehavior extends Behavior
     // the behavior also has a target, the target of the entity
     // is more of a storage for the main target of the entity
     this.target = target;
+    console.log(this.target);
   }
 
   getTarget()

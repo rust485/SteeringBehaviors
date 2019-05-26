@@ -1,10 +1,12 @@
 const DEFAULT_PADDING = 100;
 const DEFAULT_FOLLOW_SPEED = 3;
+const DEFAULT_BOUNDS = new Vector(800, 800);
 
 class Camera
 {
-  constructor(follow=null, cameraOptions={})
+  constructor(bounds=DEFAULT_BOUNDS.clone(), follow=null, options={})
   {
+    this.bounds = bounds
     this.follow = follow;
     this.center = (follow !== null) ? new Vector(follow.getX(), follow.getY()) : new Vector(0, 0);
 
@@ -13,11 +15,24 @@ class Camera
 
     this.followSpeed = (options.followSpeed !== undefined) ?
       options.followSpeed : DEFAULT_FOLLOW_SPEED;
+
+    console.log(this.center);
+    console.log(this.follow);
   }
 
+  getBounds()
+  {
+    return this.bounds;
+  }
+
+  setBounds()
+  {
+    return this.bounds;
+  }
 
   setFollow(follow)
   {
+    this.center = new Vector(follow.getX(), follow.getY());
     return this.follow = follow;
   }
 
@@ -60,6 +75,7 @@ class Camera
   {
     if (this.needsAdjustment())
     {
+      console.log(adjusting);
       const dir = this.vectorToFollow();
       dir.setMagnitude(this.followSpeed);
 
@@ -80,5 +96,28 @@ class Camera
   {
     const v = this.vectorToFollow();
     return v !== null && v.magnitude() > paddingRadius;
+  }
+
+  withinWindow(obj)
+  {
+    const halfBounds = this.bounds.clone().scale(1/2);
+    const min = Vector.subtract(this.center, halfBounds);
+    const max = Vector.subtract(this.center, halfBounds);
+    return obj.within(min, max);
+  }
+
+  translateScreenPosition(pos)
+  {
+
+  }
+
+  render(renderList)
+  {
+    background(0);
+
+    for (let i = 0; i < renderList.length; i++)
+      renderList[i].render();
+
+    translate(this.center);
   }
 }

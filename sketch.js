@@ -1,12 +1,21 @@
 const CANVAS_WIDTH = 800;
 const CANVAS_HEIGHT = 800;
 const PLAYER_TAG = 'player';
+const ENGINE_OPTIONS = {
+	camera: {
+		bounds: new Vector(CANVAS_WIDTH, CANVAS_HEIGHT),
+		options: {
+			padding: 100,
+		}
+	}
+}
 
 const MIN_BOUND = new Vector(0, 0);
 const MAX_BOUND = new Vector(CANVAS_WIDTH, CANVAS_HEIGHT);
 
 let fps = 80;
-const engine = new Engine();
+
+const engine = new Engine(ENGINE_OPTIONS);
 const mouse = new Mouse();
 const factory = new EntityFactory(CANVAS_WIDTH, CANVAS_HEIGHT);
 
@@ -22,6 +31,9 @@ function setup()
 		{ target: mouse, maxSpeed: 5.0 });
 	player.addTags(PLAYER_TAG);
   engine.addEntity(player);
+
+	// engine.getCamera().setFollow(player);
+	// engine.getCamera().setFollowSpeed(player.getMaxSpeed);
 }
 
 /**

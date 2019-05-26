@@ -1,26 +1,30 @@
-const D = 5;
-
 class Entity
 {
-  constructor(maxSpeed, maxForce, position, velocity, mass=1, behavior=new Behavior(), target=undefined)
+  static DEFAULT_MASS = 1;
+  static DEFAULT_SIZE = 5;
+  static DIR_RIGHT = new Vector(1, 0);
+  constructor(maxSpeed, maxForce, position, velocity, options={})
   {
+    // mass=1, behavior=new Behavior(), target=undefined
+
     this.maxSpeed = maxSpeed;
     this.maxForce = maxForce; // essentially max acceleration
 
     this.position = position;
     this.velocity = velocity;
 
-    this.mass = mass;
+    this.mass = (options.mass !== undefined) ? options.mass : Entity.DEFAULT_MASS;
+    this.size = (options.size !== undefined) ? options.size : Entity.DEFAULT_SIZE;
+    this.target = (options.target !== undefined) ? options.target : null;
 
-    console.log(behavior);
-    this.behavior = behavior;
+    this.behavior = (options.behavior !== undefined) ? options.behavior : new Behavior();
     this.behavior.setContext(this);
 
     this.tags = [];
 
-    this.target = target;
+    this.forward = Entity.DIR_RIGHT.clone();
 
-    this.forward = new Vector(1, 0);
+    console.log(this);
   }
 
   getTags()
@@ -66,6 +70,8 @@ class Entity
 
   setTarget(t)
   {
+    if (this.behavior !== undefined)
+      this.behavior.setTarget(t);
     return this.target = t;
   }
 
@@ -137,7 +143,7 @@ class Entity
   render()
   {
     return DisplayUtils.drawTriangle(this.position,
-      this.forward.angleFromOrigin(), D);
+      this.forward.angleFromOrigin(), this.size);
   }
 
   getX()
@@ -160,6 +166,18 @@ class Entity
     const dist = 1.75 * this.maxSpeed / this.maxForce;
 
     return dist;
+  }
+
+  within(min, max)
+  {
+    // can later do something more fancy, for now will just do a
+    // square of size 2 * this.size
+    const r = this.size * 2;
+    const d = new Vector(r, r);
+    const tl = Vector.subtract(this.position, d);
+    const br = Vector.add(this.position, d);
+
+    return tl.isWithinRect(min, max) || br.isWithinRect(min, max);
   }
 
   predictPosition(frames)

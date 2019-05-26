@@ -1,8 +1,19 @@
 class Engine
 {
-  constructor()
+  constructor(options={})
   {
     this.entities = new EntityList();
+    const camParams = {};
+    if (options.camera !== undefined)
+    {
+      camParams.follow = (options.camera.follow !== undefined) ?
+        options.camera.follow : null;
+      camParams.bounds = options.camera.bounds;
+      camParams.options = options.camera.options;
+    }
+
+    this.camera = new Camera(camParams.bounds,
+      camParams.follow, camParams.options);
   }
 
   update()
@@ -33,6 +44,16 @@ class Engine
     return this.entities.toArray().filter(e => e.containsTag(tag));
   }
 
+  getCamera()
+  {
+    return this.camera;
+  }
+
+  setCamera(cam)
+  {
+    return this.camera = cam;
+  }
+
   generateId()
   {
     return Math.random().toString(36).substring(2)
@@ -44,8 +65,7 @@ class Engine
     background(0);
 
     const ents = this.entities.toArray();
-
-    for (let i = 0; i < ents.length; i++)
-      ents[i].render();
+    ents.forEach(e => e.render());
+    // this.camera.render(ents);
   }
 }

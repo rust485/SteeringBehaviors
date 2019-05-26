@@ -1,11 +1,24 @@
+const DEFAULT_MAX_SPEED = 5.0;
+const DEFAULT_MAX_FORCE = 3.0;
+const DEFAULT_MASS = 1.0;
+const DEFAULT_SIZE = 5.0;
+
+const INITIAL_VELOCITY = new Vector(0, 0);
+
 class EntityFactory
 {
-  constructor(boundX, boundY, maxSpeed = 5.0, maxForce = 3.0, mass = 1.0)
+  constructor(boundX, boundY, options={})
   {
     this.bounds = new Vector(boundX, boundY);
-    this.maxSpeed = maxSpeed;
-    this.maxForce = maxForce;
-    this.mass = mass;
+
+    this.maxSpeed = (options.maxSpeed !== undefined) ?
+      options.maxSpeed : DEFAULT_MAX_SPEED;
+    this.maxForce = (options.maxForce !== undefined) ?
+      options.maxForce : DEFAULT_MAX_FORCE;
+    this.mass = (options.mass !== undefined) ?
+      options.mass : DEFAULT_MASS;
+    this.size = (options.size !== undefined) ?
+      options.size : DEFAULT_SIZE;
   }
 
   setBounds(bx, by)
@@ -48,57 +61,82 @@ class EntityFactory
     return this.mass;
   }
 
-  createBehaviorlessEntity(minBounds, maxBounds)
+  setSize(s)
+  {
+    return this.size = s;
+  }
+
+  getSize()
+  {
+    return this.size;
+  }
+
+  parseOptions(ops)
+  {
+    return {
+      speed: (ops.speed !== undefined) ?
+        ops.speed : this.maxSpeed,
+      force: (ops.force !== undefined) ?
+        ops.force : this.maxForce,
+      mass: (ops.mass !== undefined) ?
+        ops.mass : this.mass,
+      size: (ops.size !== undefined) ?
+        ops.size : this.size,
+      target: (ops.target !== undefined) ? // yes, I know this is redundant.
+        ops.target : undefined            // Just explicitly shows the options
+    };
+  }
+
+  createBehaviorlessEntity(minBounds, maxBounds, options={})
   {
     const behavior = new Behavior();
 
     const pos = Vector.generatePointWithinRect(minBounds, maxBounds);
 
-    return this.createEntityWithBehavior(pos, behavior);
+    const ops = this.parseOptions(options);
+
+    return this.createEntityWithBehavior(pos, behavior, ops);
   }
 
-  createControlledEntity(minBounds, maxBounds)
+  createControlledEntity(minBounds, maxBounds, options={})
   {
     const behavior = new ControlledBehavior();
 
     const pos = Vector.generatePointWithinRect(minBounds, maxBounds);
 
-    return this.createEntityWithBehavior(pos, behavior);
+    const ops = this.parseOptions(options);
+
+    return this.createEntityWithBehavior(pos, behavior, ops);
   }
 
-  createMouseControlledEntity(minBounds, maxBounds)
+  createMouseControlledEntity(minBounds, maxBounds, options)
   {
     const behavior = new SeekBehavior();
     behavior.setTarget(mouse);
-    const pos = Vector.generatePointWithinRect(minBounds, maxBounds);
 
-    return this.createEntityWithBehavior(pos, behavior);
+    const pos = (options.position !== undefined) ?
+      options.position : Vector.generatePointWithinRect(minBounds, maxBounds);
+
+    const ops = this.parseOptions(options);
+
+    return this.createEntityWithBehavior(pos, behavior, ops);
   }
 
   createSeekingEntity(minBounds, maxBounds, options={})
   {
-    const behavior = new SeekBehavior();
+    const behavior = new SeekBehavior(null, options.target);
 
     const pos = (options.position !== undefined) ?
       options.position : Vector.generatePointWithinRect(minBounds, maxBounds);
-    const speed = (options.speed !== undefined) ?
-      options.speed : Math.random() * 3 + 1;
-    const force = (options.force !== undefined) ?
-      options.force : Math.random();
 
-    const e = this.createEntityWithBehavior(pos, behavior, speed, force);
+    const ops = this.parseOptions(options);
 
-    if (options.target !== undefined) e.setTarget(options.target);
+    const e = this.createEntityWithBehavior(pos, behavior, ops);
+
+    if (options.target !== undefined)
+      e.setTarget(options.target);
 
     return e;
-  }
-
-  createEntityWithBehavior(pos, behavior, speed=this.maxSpeed, force=this.maxForce)
-  {
-    const vel = new Vector(0, 0);
-
-    return new Entity(speed, force, pos, vel,
-      this.mass, behavior)
   }
 
   createFleeingEntity(minBounds, maxBounds, options={})
@@ -107,16 +145,28 @@ class EntityFactory
 
     const pos = (options.position !== undefined) ?
       options.position : Vector.generatePointWithinRect(minBounds, maxBounds);
-    const speed = (options.speed !== undefined) ?
-      options.speed : Math.random() * 3 + 1;
-    const force = (options.force !== undefined) ?
-      options.force : Math.random();
 
-    const e = this.createEntityWithBehavior(pos, behavior, speed, force);
+    const ops = this.parseOptions(options);
+
+    const e = this.createEntityWithBehavior(pos, behavior, ops);
 
     if (options.avoid !== undefined) behavior.setAvoid(options.avoid);
     if (options.target !== undefined) e.setTarget(options.target);
 
     return e;
+  }
+
+  createEntityWithBehavior(pos, behavior, options={})
+  {
+    const vel = INITIAL_VELOCITY.clone();
+
+    const ops = {
+      mass: options.mass,
+      size: options.size,
+      target: options.target,
+      behavior,
+    };
+
+    return new Entity(options.speed, options.force, pos, vel, ops)
   }
 }

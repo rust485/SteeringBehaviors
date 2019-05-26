@@ -263,4 +263,10 @@ class Vector
 
 		return new Vector(x, y);
 	}
+
+	isWithinRect(min, max)
+	{
+		return (min.x < this.x && min.y < this.y &&
+			max.x > this.x && max.y > this.y);
+	}
 }
