@@ -2,7 +2,7 @@ class FleeBehavior extends Behavior
 {
   constructor(ctx=null, avoid=null)
   {
-    this.super(ctx);
+    super(ctx);
 
     this.avoid = avoid;
   }
@@ -26,14 +26,6 @@ class FleeBehavior extends Behavior
 
     const desiredVelocity = Vector.subtract(avoidPos, this.ctx.getPosition())
       .setMagnitude(this.ctx.getMaxSpeed());
-
-
-    const stoppingDistance = this.ctx.getStoppingDistance();
-    const distToTarget = Vector.subtract(targetPos, this.ctx.getPosition()).magnitude();
-
-    if (distToTarget <= stoppingDistance)
-      desiredVelocity.setMagnitude(this.ctx.maxSpeed * distToTarget / stoppingDistance);
-
 
     const steering = Vector.subtract(desiredVelocity, this.ctx.getVelocity())
       .scale(-1);

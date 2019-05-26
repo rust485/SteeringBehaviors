@@ -32,4 +32,16 @@ class EntityList
 
     return array;
   }
+
+  getEntitiesByCondition(cond)
+  {
+    const array = [];
+    const keys = Object.keys(this.map);
+
+    for (let i = 0; i < keys.length; i++)
+      if (cond(this.map[keys[i]]))
+        array.push(this.map[keys[i]]);
+
+    return array;
+  }
 }

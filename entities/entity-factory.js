@@ -2,6 +2,7 @@ const DEFAULT_MAX_SPEED = 5.0;
 const DEFAULT_MAX_FORCE = 3.0;
 const DEFAULT_MASS = 1.0;
 const DEFAULT_SIZE = 5.0;
+const DEFAULT_COLOR = DisplayUtils.colorLookup.RED;
 
 const INITIAL_VELOCITY = new Vector(0, 0);
 
@@ -19,6 +20,18 @@ class EntityFactory
       options.mass : DEFAULT_MASS;
     this.size = (options.size !== undefined) ?
       options.size : DEFAULT_SIZE;
+    this.color = (options.color !== undefined) ?
+      options.color : DEFAULT_COLOR;
+  }
+
+  getRandomSpeed()
+  {
+    return (Math.random() * (this.maxSpeed - 1)) + 1
+  }
+
+  getRandomForce()
+  {
+    return (Math.random() * (this.maxForce - 1)) + 1
   }
 
   setBounds(bx, by)
@@ -75,13 +88,15 @@ class EntityFactory
   {
     return {
       speed: (ops.speed !== undefined) ?
-        ops.speed : this.maxSpeed,
+        ops.speed : this.getRandomSpeed(),
       force: (ops.force !== undefined) ?
-        ops.force : this.maxForce,
+        ops.force : this.getRandomForce(),
       mass: (ops.mass !== undefined) ?
         ops.mass : this.mass,
       size: (ops.size !== undefined) ?
         ops.size : this.size,
+      color: (ops.color !== undefined) ?
+        ops.color : this.color,
       target: (ops.target !== undefined) ? // yes, I know this is redundant.
         ops.target : undefined            // Just explicitly shows the options
     };
@@ -160,6 +175,8 @@ class EntityFactory
   {
     const vel = INITIAL_VELOCITY.clone();
 
+    const color = options.color;
+
     const ops = {
       mass: options.mass,
       size: options.size,
@@ -167,6 +184,7 @@ class EntityFactory
       behavior,
     };
 
-    return new Entity(options.speed, options.force, pos, vel, ops)
+    return new Entity(options.speed, options.force, pos, vel,
+      color, ops)
   }
 }

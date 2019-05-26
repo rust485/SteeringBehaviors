@@ -1,6 +1,6 @@
 class Engine
 {
-  constructor(options={})
+  constructor(mouse, options={})
   {
     this.entities = new EntityList();
     const camParams = {};
@@ -14,14 +14,20 @@ class Engine
 
     this.camera = new Camera(camParams.bounds,
       camParams.follow, camParams.options);
+
+    this.mouse = mouse;
+    this.mouse.setTranslator(this.camera);
   }
 
   update()
   {
+    this.mouse.update();
     const ents = this.entities.toArray();
 
     for (let i = 0; i < ents.length; i++)
       ents[i].update();
+
+    this.camera.update();
   }
 
   addEntity(e)
@@ -54,6 +60,16 @@ class Engine
     return this.camera = cam;
   }
 
+  getMouse()
+  {
+    return this.mouse;
+  }
+
+  setMouse(mouse)
+  {
+    return this.mouse = mouse;
+  }
+
   generateId()
   {
     return Math.random().toString(36).substring(2)
@@ -62,10 +78,9 @@ class Engine
 
   render()
   {
-    background(0);
+    const cam = this.camera;
+    const ents = this.entities.getEntitiesByCondition((obj) => this.camera.withinWindow(obj));
 
-    const ents = this.entities.toArray();
-    ents.forEach(e => e.render());
-    // this.camera.render(ents);
+    this.camera.render(ents);
   }
 }

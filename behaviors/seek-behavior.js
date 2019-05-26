@@ -1,13 +1,12 @@
 class SeekBehavior extends Behavior
 {
-  constructor(ctx, target=null)
+  constructor(ctx=null, target=null)
   {
     super(ctx);
 
     // the behavior also has a target, the target of the entity
     // is more of a storage for the main target of the entity
     this.target = target;
-    console.log(this.target);
   }
 
   getTarget()
@@ -32,7 +31,6 @@ class SeekBehavior extends Behavior
 
     const desiredVelocity = Vector.subtract(targetPos, this.ctx.getPosition())
       .setMagnitude(this.ctx.getMaxSpeed());
-
 
     const stoppingDistance = this.ctx.getStoppingDistance();
     const distToTarget = Vector.subtract(targetPos, this.ctx.getPosition()).magnitude();

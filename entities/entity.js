@@ -3,7 +3,8 @@ class Entity
   static DEFAULT_MASS = 1;
   static DEFAULT_SIZE = 5;
   static DIR_RIGHT = new Vector(1, 0);
-  constructor(maxSpeed, maxForce, position, velocity, options={})
+
+  constructor(maxSpeed, maxForce, position, velocity, color, options={})
   {
     // mass=1, behavior=new Behavior(), target=undefined
 
@@ -21,10 +22,10 @@ class Entity
     this.behavior.setContext(this);
 
     this.tags = [];
+    
+    this.color = color;
 
     this.forward = Entity.DIR_RIGHT.clone();
-
-    console.log(this);
   }
 
   getTags()
@@ -140,10 +141,10 @@ class Entity
     return this.mass = m;
   }
 
-  render()
+  render(pos)
   {
-    return DisplayUtils.drawTriangle(this.position,
-      this.forward.angleFromOrigin(), this.size);
+    return DisplayUtils.drawTriangle(pos,
+      this.forward.angleFromOrigin(), this.size, this.color);
   }
 
   getX()
@@ -158,6 +159,16 @@ class Entity
     // did this so that targets can either be positions themselves, or moving
     // entities. This is transparent to the behavior.
     return this.position.getY();
+  }
+
+  getColor()
+  {
+    return this.color;
+  }
+
+  setColor(color)
+  {
+    return this.color = color;
   }
 
   getStoppingDistance()

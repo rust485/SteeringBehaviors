@@ -15,9 +15,6 @@ class Camera
 
     this.followSpeed = (options.followSpeed !== undefined) ?
       options.followSpeed : DEFAULT_FOLLOW_SPEED;
-
-    console.log(this.center);
-    console.log(this.follow);
   }
 
   getBounds()
@@ -71,11 +68,20 @@ class Camera
     return this.followSpeed;
   }
 
+  getTopLeft()
+  {
+    return Vector.subtract(this.center, this.bounds.clone().scale(1/2));
+  }
+
+  getBottomRight()
+  {
+    return Vector.add(this.center, this.bounds.clone().scale(1/2));
+  }
+
   update()
   {
     if (this.needsAdjustment())
     {
-      console.log(adjusting);
       const dir = this.vectorToFollow();
       dir.setMagnitude(this.followSpeed);
 
@@ -88,36 +94,48 @@ class Camera
   vectorToFollow()
   {
     if (this.follow !== null)
-      return Vector.subtract(this.center, this.follow.getPosition());
+      return Vector.subtract(this.follow.getPosition(), this.center);
     return null;
   }
 
   needsAdjustment()
   {
     const v = this.vectorToFollow();
-    return v !== null && v.magnitude() > paddingRadius;
+    return v !== null && v.magnitude() > this.padding;
   }
 
   withinWindow(obj)
   {
-    const halfBounds = this.bounds.clone().scale(1/2);
-    const min = Vector.subtract(this.center, halfBounds);
-    const max = Vector.subtract(this.center, halfBounds);
-    return obj.within(min, max);
+    return obj.within(this.getTopLeft(), this.getBottomRight());
   }
 
-  translateScreenPosition(pos)
+  translateFromScreenPosition(pos)
   {
+    const screenMiddle = this.bounds.clone().scale(1/2);
 
+    const d = Vector.subtract(pos, screenMiddle);
+
+    return Vector.add(this.center, d);
+  }
+
+  translateToScreenPosition(pos)
+  {
+    const screenMiddle = this.bounds.clone().scale(1/2);
+
+    const d = Vector.subtract(pos, this.center);
+
+    return Vector.add(screenMiddle, d);
   }
 
   render(renderList)
   {
     background(0);
-
     for (let i = 0; i < renderList.length; i++)
-      renderList[i].render();
+      renderList[i].render(this.translateToScreenPosition(renderList[i].getPosition()));
+  }
 
-    translate(this.center);
+  static withinWindow(obj, topLeft, topRight)
+  {
+    return obj.within(topLeft, topRight);
   }
 }
