@@ -183,6 +183,22 @@ class EntityFactory
     return this.createEntityWithBehavior(pos, behavior, ops);
   }
 
+  createPursuingEntity(minBounds, maxBounds, options={})
+  {
+    const behavior = new PursuitBehavior();
+
+    const pos = (options.position !== undefined) ?
+      options.position : EntityFactory.generatePointWithinRect(minBounds, maxBounds);
+
+    const ops = this.parseOptions(options);
+
+    const e = this.createEntityWithBehavior(pos, behavior, ops);
+
+    if (options.target !== undefined) e.setTarget(options.target);
+
+    return e;
+  }
+
   createEntityWithBehavior(pos, behavior, options={})
   {
     const vel = INITIAL_VELOCITY.clone();

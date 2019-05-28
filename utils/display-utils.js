@@ -5,6 +5,7 @@ class DisplayUtils
     BLUE: 'blue',
     GREEN: 'green',
     YELLOW: 'yellow',
+    PINK: 'pink',
   }
 
   static drawTriangle(center, rotation, d, color)

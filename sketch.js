@@ -28,6 +28,7 @@ const factory = new EntityFactory(CANVAS_WIDTH, CANVAS_HEIGHT,
 	FACTORY_OPTIONS);
 
 const SEEKERS = 5;
+const PURSUING = 3;
 const FLEEING = 1;
 const WANDERING = 2;
 
@@ -36,18 +37,30 @@ function setup()
 	createCanvas(CANVAS_WIDTH, CANVAS_HEIGHT);
 	frameRate(fps);
 
-  // const player = factory.createControlledEntity(MIN_BOUND, MAX_BOUND);
-  const player = factory.createSeekingEntity(MIN_BOUND, MAX_BOUND,
+	const player = initPlayer();
+	initEntities(player);
+}
+
+function initPlayer()
+{
+	// const player = factory.createControlledEntity(MIN_BOUND, MAX_BOUND);
+	const player = factory.createSeekingEntity(MIN_BOUND, MAX_BOUND,
 		{ target: engine.getMouse(), speed: 5.0, color: DisplayUtils.colorLookup.GREEN });
 	player.addTags(PLAYER_TAG);
-  engine.addEntity(player);
+	engine.addEntity(player);
 
 	engine.getCamera().setFollow(player);
 	engine.getCamera().setFollowSpeed(player.getMaxSpeed());
 
+	return player;
+}
+
+function initEntities(player)
+{
 	for (let i = 0; i < SEEKERS; i++)
 	{
 		const entity = factory.createSeekingEntity(MIN_BOUND, MAX_BOUND);
+		entity.setColor(DisplayUtils.colorLookup.RED);
 		entity.setTarget(player);
 		engine.addEntity(entity);
 	}
@@ -64,6 +77,14 @@ function setup()
 	{
 		const entity = factory.createWanderingEntity(MIN_BOUND, MAX_BOUND);
 		entity.setColor(DisplayUtils.colorLookup.YELLOW);
+		engine.addEntity(entity);
+	}
+
+	for (let i = 0; i < PURSUING; i++)
+	{
+		const entity = factory.createPursuingEntity(MIN_BOUND, MAX_BOUND);
+		entity.setColor(DisplayUtils.colorLookup.PINK);
+		entity.setTarget(player);
 		engine.addEntity(entity);
 	}
 }

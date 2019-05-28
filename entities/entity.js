@@ -190,15 +190,4 @@ class Entity
 
     return tl.isWithinRect(min, max) || br.isWithinRect(min, max);
   }
-
-  predictPosition(frames)
-  {
-    if (frames <= 0)
-      return this.position;
-
-    const v = this.velocity.clone();
-    v.scale(frames);
-
-    return Vector.add(v, this.position);
-  }
 }
