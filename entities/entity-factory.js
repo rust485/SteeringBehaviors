@@ -209,6 +209,21 @@ class EntityFactory
     return e;
   }
 
+  createEvadingEntity(options={})
+  {
+    const behavior = new EvadeBehavior();
+
+    const pos = EntityFactory.decidePosition(options);
+
+    const ops = this.parseOptions(options);
+
+    const e = this.createEntityWithBehavior(pos, behavior, ops);
+
+    if (options.avoid !== undefined) e.setAvoid(options.avoid);
+
+    return e;
+  }
+
   createEntityWithBehavior(pos, behavior, options={})
   {
     const vel = INITIAL_VELOCITY.clone();

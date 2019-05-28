@@ -1,26 +1,26 @@
-class PursuitBehavior extends Behavior
+class EvadeBehavior extends Behavior
 {
   static DEFAULT_PREDICTION_TUNING = .1;
 
-  constructor(ctx=null, target=null, options={})
+  constructor(ctx=null, avoid=null, options={})
   {
     super(ctx);
 
     // the behavior also has a target, the target of the entity
     // is more of a storage for the main target of the entity
-    this.target = target;
+    this.avoid = avoid;
     this.predictionTuning = (options.predictionTuning !== undefined) ?
-      options.predictionTuning : PursuitBehavior.DEFAULT_PREDICTION_TUNING;
+      options.predictionTuning : EvadeBehavior.DEFAULT_PREDICTION_TUNING;
   }
 
-  getTarget()
+  getAvoid()
   {
-    return this.target;
+    return this.avoid;
   }
 
-  setTarget(target)
+  setAvoid(e)
   {
-    return this.target = target;
+    return this.avoid = e;
   }
 
   getPredictionTuning()
@@ -37,27 +37,22 @@ class PursuitBehavior extends Behavior
   {
     super.update();
 
-    if (this.ctx === null || this.target === null)
+    if (this.ctx === null || this.avoid === null)
       return;
 
-    const distToTarget = Vector.subtract(this.target.getPosition(),
+    const distToTarget = Vector.subtract(this.avoid.getPosition(),
       this.ctx.getPosition()).magnitude();
 
     const lookAhead = (distToTarget / this.ctx.getMaxSpeed()) * this.predictionTuning;
 
-    const predictedTargetPos = PursuitBehavior.predictPosition(this.target.getPosition(),
-      this.target.getVelocity(), lookAhead);
+    const predictedTargetPos = PursuitBehavior.predictPosition(this.avoid.getPosition(),
+      this.avoid.getVelocity(), lookAhead);
 
     const desiredVelocity = Vector.subtract(predictedTargetPos, this.ctx.getPosition())
       .setMagnitude(this.ctx.getMaxSpeed());
 
-    const stoppingDistance = this.ctx.getStoppingDistance();
-
-    if (distToTarget <= stoppingDistance)
-      desiredVelocity.setMagnitude(this.ctx.maxSpeed * distToTarget / stoppingDistance);
-
-
-    const steering = Vector.subtract(desiredVelocity, this.ctx.getVelocity());
+    const steering = Vector.subtract(desiredVelocity, this.ctx.getVelocity())
+      .scale(-1);
 
     this.ctx.updateVelocity(steering);
     this.ctx.move();

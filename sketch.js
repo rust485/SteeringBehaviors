@@ -36,6 +36,7 @@ const SEEKERS = 5;
 const PURSUING = 3;
 const FLEEING = 1;
 const WANDERING = 2;
+const EVADING = 3;
 
 function setup()
 {
@@ -77,8 +78,8 @@ function initEntities(player)
 	for (let i = 0; i < FLEEING; i++)
 	{
 		const entity = factory.createFleeingEntity({ bounds });
-		entity.getBehavior().setAvoid(player);
 		entity.setColor(DisplayUtils.colorLookup.BLUE);
+		entity.getBehavior().setAvoid(player);
 		engine.addEntity(entity);
 	}
 
@@ -94,6 +95,14 @@ function initEntities(player)
 		const entity = factory.createPursuingEntity({ bounds });
 		entity.setColor(DisplayUtils.colorLookup.PINK);
 		entity.setTarget(player);
+		engine.addEntity(entity);
+	}
+
+	for (let i = 0; i < EVADING; i++)
+	{
+		const entity = factory.createEvadingEntity({ bounds });
+		entity.setColor(DisplayUtils.colorLookup.PURPLE);
+		entity.getBehavior().setAvoid(player);
 		engine.addEntity(entity);
 	}
 }
