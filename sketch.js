@@ -1,7 +1,10 @@
 const CANVAS_WIDTH = 800;
 const CANVAS_HEIGHT = 800;
 
+const PLAYER_SPEED = 5.0;
+const PLAYER_COLOR = DisplayUtils.colorLookup.GREEN;
 const PLAYER_TAG = 'player';
+
 const ENGINE_OPTIONS = {
 	camera: {
 		bounds: new Vector(CANVAS_WIDTH, CANVAS_HEIGHT),
@@ -18,8 +21,10 @@ const FACTORY_OPTIONS = {
 	size: 5,
 }
 
-const MIN_BOUND = new Vector(0, 0);
-const MAX_BOUND = new Vector(CANVAS_WIDTH, CANVAS_HEIGHT);
+const min = new Vector(0, 0);
+const max = new Vector(CANVAS_WIDTH, CANVAS_HEIGHT);
+
+const bounds = { min, max };
 
 let fps = 80;
 
@@ -44,8 +49,12 @@ function setup()
 function initPlayer()
 {
 	// const player = factory.createControlledEntity(MIN_BOUND, MAX_BOUND);
-	const player = factory.createSeekingEntity(MIN_BOUND, MAX_BOUND,
-		{ target: engine.getMouse(), speed: 5.0, color: DisplayUtils.colorLookup.GREEN });
+	const player = factory.createSeekingEntity({
+		target: engine.getMouse(),
+		speed: PLAYER_SPEED,
+		color: PLAYER_COLOR,
+		bounds
+	});
 	player.addTags(PLAYER_TAG);
 	engine.addEntity(player);
 
@@ -59,7 +68,7 @@ function initEntities(player)
 {
 	for (let i = 0; i < SEEKERS; i++)
 	{
-		const entity = factory.createSeekingEntity(MIN_BOUND, MAX_BOUND);
+		const entity = factory.createSeekingEntity({ bounds });
 		entity.setColor(DisplayUtils.colorLookup.RED);
 		entity.setTarget(player);
 		engine.addEntity(entity);
@@ -67,7 +76,7 @@ function initEntities(player)
 
 	for (let i = 0; i < FLEEING; i++)
 	{
-		const entity = factory.createFleeingEntity(MIN_BOUND, MAX_BOUND);
+		const entity = factory.createFleeingEntity({ bounds });
 		entity.getBehavior().setAvoid(player);
 		entity.setColor(DisplayUtils.colorLookup.BLUE);
 		engine.addEntity(entity);
@@ -75,14 +84,14 @@ function initEntities(player)
 
 	for (let i = 0; i < WANDERING; i++)
 	{
-		const entity = factory.createWanderingEntity(MIN_BOUND, MAX_BOUND);
+		const entity = factory.createWanderingEntity({ bounds });
 		entity.setColor(DisplayUtils.colorLookup.YELLOW);
 		engine.addEntity(entity);
 	}
 
 	for (let i = 0; i < PURSUING; i++)
 	{
-		const entity = factory.createPursuingEntity(MIN_BOUND, MAX_BOUND);
+		const entity = factory.createPursuingEntity({ bounds });
 		entity.setColor(DisplayUtils.colorLookup.PINK);
 		entity.setTarget(player);
 		engine.addEntity(entity);
@@ -97,7 +106,7 @@ function mousePressed()
 {
 	const position = engine.getMouse().getPosition().clone();
 
-	const entity = factory.createSeekingEntity(MIN_BOUND, MAX_BOUND, { position });
+	const entity = factory.createSeekingEntity({ position, bounds });
 
 	entity.setTarget(engine.getEntities(PLAYER_TAG)[0]);
 

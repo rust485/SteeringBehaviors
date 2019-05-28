@@ -4,6 +4,8 @@ const DEFAULT_MASS = 1.0;
 const DEFAULT_SIZE = 5.0;
 const DEFAULT_COLOR = DisplayUtils.colorLookup.RED;
 
+const ORIGIN = new Vector(0, 0);
+
 const INITIAL_VELOCITY = new Vector(0, 0);
 
 class EntityFactory
@@ -84,6 +86,19 @@ class EntityFactory
     return this.size;
   }
 
+  static decidePosition(options)
+  {
+    if (options.position)
+      return options.position;
+
+    else if (options.bounds.max !== undefined &&
+      options.bounds.min !== undefined)
+      return EntityFactory.generatePointWithinRect(options.bounds.min,
+        options.bounds.max);
+
+    return ORIGIN.clone();
+  }
+
   parseOptions(ops)
   {
     return {
@@ -102,47 +117,45 @@ class EntityFactory
     };
   }
 
-  createBehaviorlessEntity(minBounds, maxBounds, options={})
+  createBehaviorlessEntity(options={})
   {
     const behavior = new Behavior();
 
-    const pos = EntityFactory.generatePointWithinRect(minBounds, maxBounds);
+    const pos = EntityFactory.decidePosition(options);
 
     const ops = this.parseOptions(options);
 
     return this.createEntityWithBehavior(pos, behavior, ops);
   }
 
-  createControlledEntity(minBounds, maxBounds, options={})
+  createControlledEntity(options={})
   {
     const behavior = new ControlledBehavior();
 
-    const pos = EntityFactory.generatePointWithinRect(minBounds, maxBounds);
+    const pos = EntityFactory.decidePosition(options);
 
     const ops = this.parseOptions(options);
 
     return this.createEntityWithBehavior(pos, behavior, ops);
   }
 
-  createMouseControlledEntity(minBounds, maxBounds, options)
+  createMouseControlledEntity(options={})
   {
     const behavior = new SeekBehavior();
     behavior.setTarget(mouse);
 
-    const pos = (options.position !== undefined) ?
-      options.position : EntityFactory.generatePointWithinRect(minBounds, maxBounds);
+    const pos = EntityFactory.decidePosition(options);
 
     const ops = this.parseOptions(options);
 
     return this.createEntityWithBehavior(pos, behavior, ops);
   }
 
-  createSeekingEntity(minBounds, maxBounds, options={})
+  createSeekingEntity(options={})
   {
     const behavior = new SeekBehavior(null, options.target);
 
-    const pos = (options.position !== undefined) ?
-      options.position : EntityFactory.generatePointWithinRect(minBounds, maxBounds);
+    const pos = EntityFactory.decidePosition(options);
 
     const ops = this.parseOptions(options);
 
@@ -154,12 +167,11 @@ class EntityFactory
     return e;
   }
 
-  createFleeingEntity(minBounds, maxBounds, options={})
+  createFleeingEntity(options={})
   {
     const behavior = new FleeBehavior();
 
-    const pos = (options.position !== undefined) ?
-      options.position : EntityFactory.generatePointWithinRect(minBounds, maxBounds);
+    const pos = EntityFactory.decidePosition(options);
 
     const ops = this.parseOptions(options);
 
@@ -171,24 +183,22 @@ class EntityFactory
     return e;
   }
 
-  createWanderingEntity(minBounds, maxBounds, options={})
+  createWanderingEntity(options={})
   {
     const behavior = new WanderBehavior();
 
-    const pos = (options.position !== undefined) ?
-      options.position : EntityFactory.generatePointWithinRect(minBounds, maxBounds);
+    const pos = EntityFactory.decidePosition(options);
 
     const ops = this.parseOptions(options);
 
     return this.createEntityWithBehavior(pos, behavior, ops);
   }
 
-  createPursuingEntity(minBounds, maxBounds, options={})
+  createPursuingEntity(options={})
   {
     const behavior = new PursuitBehavior();
 
-    const pos = (options.position !== undefined) ?
-      options.position : EntityFactory.generatePointWithinRect(minBounds, maxBounds);
+    const pos = EntityFactory.decidePosition(options);
 
     const ops = this.parseOptions(options);
 
