@@ -22,7 +22,7 @@ class Entity
     this.behavior.setContext(this);
 
     this.tags = [];
-    
+
     this.color = color;
 
     this.forward = Entity.DIR_RIGHT.clone();
@@ -144,7 +144,7 @@ class Entity
   render(pos)
   {
     return DisplayUtils.drawTriangle(pos,
-      this.forward.angleFromOrigin(), this.size, this.color);
+      this.forward.angleFromPositiveXAxis(), this.size, this.color);
   }
 
   getX()
@@ -199,7 +199,6 @@ class Entity
     const v = this.velocity.clone();
     v.scale(frames);
 
-    return Vector.add(v,
-      this.position);
+    return Vector.add(v, this.position);
   }
 }

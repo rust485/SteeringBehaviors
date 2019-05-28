@@ -106,7 +106,7 @@ class EntityFactory
   {
     const behavior = new Behavior();
 
-    const pos = Vector.generatePointWithinRect(minBounds, maxBounds);
+    const pos = EntityFactory.generatePointWithinRect(minBounds, maxBounds);
 
     const ops = this.parseOptions(options);
 
@@ -117,7 +117,7 @@ class EntityFactory
   {
     const behavior = new ControlledBehavior();
 
-    const pos = Vector.generatePointWithinRect(minBounds, maxBounds);
+    const pos = EntityFactory.generatePointWithinRect(minBounds, maxBounds);
 
     const ops = this.parseOptions(options);
 
@@ -130,7 +130,7 @@ class EntityFactory
     behavior.setTarget(mouse);
 
     const pos = (options.position !== undefined) ?
-      options.position : Vector.generatePointWithinRect(minBounds, maxBounds);
+      options.position : EntityFactory.generatePointWithinRect(minBounds, maxBounds);
 
     const ops = this.parseOptions(options);
 
@@ -142,7 +142,7 @@ class EntityFactory
     const behavior = new SeekBehavior(null, options.target);
 
     const pos = (options.position !== undefined) ?
-      options.position : Vector.generatePointWithinRect(minBounds, maxBounds);
+      options.position : EntityFactory.generatePointWithinRect(minBounds, maxBounds);
 
     const ops = this.parseOptions(options);
 
@@ -159,7 +159,7 @@ class EntityFactory
     const behavior = new FleeBehavior();
 
     const pos = (options.position !== undefined) ?
-      options.position : Vector.generatePointWithinRect(minBounds, maxBounds);
+      options.position : EntityFactory.generatePointWithinRect(minBounds, maxBounds);
 
     const ops = this.parseOptions(options);
 
@@ -169,6 +169,18 @@ class EntityFactory
     if (options.target !== undefined) e.setTarget(options.target);
 
     return e;
+  }
+
+  createWanderingEntity(minBounds, maxBounds, options={})
+  {
+    const behavior = new WanderBehavior();
+
+    const pos = (options.position !== undefined) ?
+      options.position : EntityFactory.generatePointWithinRect(minBounds, maxBounds);
+
+    const ops = this.parseOptions(options);
+
+    return this.createEntityWithBehavior(pos, behavior, ops);
   }
 
   createEntityWithBehavior(pos, behavior, options={})
@@ -186,5 +198,15 @@ class EntityFactory
 
     return new Entity(options.speed, options.force, pos, vel,
       color, ops)
+  }
+
+  static generatePointWithinRect(min, max)
+  {
+    const delta = Vector.subtract(max, min);
+
+    const x = Math.random() * delta.x + min.x;
+    const y = Math.random() * delta.y + min.y;
+
+    return new Vector(x, y);
   }
 }

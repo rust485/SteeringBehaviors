@@ -1,5 +1,5 @@
 const CANVAS_WIDTH = 800;
-const CANVAS_HEIGHT = 700;
+const CANVAS_HEIGHT = 800;
 
 const PLAYER_TAG = 'player';
 const ENGINE_OPTIONS = {
@@ -29,6 +29,7 @@ const factory = new EntityFactory(CANVAS_WIDTH, CANVAS_HEIGHT,
 
 const SEEKERS = 5;
 const FLEEING = 1;
+const WANDERING = 2;
 
 function setup()
 {
@@ -56,6 +57,13 @@ function setup()
 		const entity = factory.createFleeingEntity(MIN_BOUND, MAX_BOUND);
 		entity.getBehavior().setAvoid(player);
 		entity.setColor(DisplayUtils.colorLookup.BLUE);
+		engine.addEntity(entity);
+	}
+
+	for (let i = 0; i < WANDERING; i++)
+	{
+		const entity = factory.createWanderingEntity(MIN_BOUND, MAX_BOUND);
+		entity.setColor(DisplayUtils.colorLookup.YELLOW);
 		engine.addEntity(entity);
 	}
 }

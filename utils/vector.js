@@ -15,11 +15,21 @@ class Vector
 		this.y = y;
 	}
 
+	/**
+	 * get the x value of this vector
+	 * @method getX
+	 * @return {Number} the x value of this vector
+	 */
 	getX()
 	{
 		return this.x;
 	}
 
+	/**
+	 * get the y value of this vector
+	 * @method getY
+	 * @return {Number} the y value of this vector
+	 */
 	getY()
 	{
 		return this.y;
@@ -150,8 +160,8 @@ class Vector
 	 */
 	angleBetween(v)
 	{
-		let dot = this.dotProduct(v);
-		let det = this.crossProduct(v);
+		const dot = this.dotProduct(v);
+		const det = this.crossProduct(v);
 		return Math.atan2(det, dot);
 	}
 
@@ -178,14 +188,14 @@ class Vector
 	}
 
 	/**
-	 * Rotates this vector in the direction of dir
-	 * @method rotate
-	 * @param  {Vector} dir direction to rotate in
+	 * Sets this vector's rotation to match that of dir
+	 * @method rotateToVector
+	 * @param  {Vector} dir direction of this vector after the rotation
 	 * @return {Vector}     a reference to this vector after applying the rotation
 	 */
-	rotate(dir)
+	rotateToVector(dir)
 	{
-		let mag = this.magnitude();
+		const mag = this.magnitude();
 		this.x = dir.x;
 		this.y = dir.y;
 		this.normalize();
@@ -193,10 +203,32 @@ class Vector
 		return this;
 	}
 
-	angleFromOrigin()
+	/**
+	 * Sets the angle of this Vector in radians from the
+	 * positive x axis.
+	 * @method setAngle
+	 * @param  {Number} theta radians between this vector and the positive x axis
+	 * @return {Vector} 			a reference to this vector after the angle has been set
+	 */
+	setAngle(theta)
 	{
-		const signY = (this.y !== 0) ? this.y / Math.abs(this.y) :
-			1;
+		const mag = this.magnitude();
+		this.x = Math.cos(theta) * mag;
+		this.y = Math.sin(theta) * mag;
+		return this;
+	}
+
+	/**
+	 * Calculate the angle between this vector and the positive
+	 * x axis
+	 * @method angleFromPositiveXAxis
+	 * @return {Number}        angle between this vector and the positive
+	 * 												 x axis in radians
+	 */
+	angleFromPositiveXAxis()
+	{
+		const signY = (this.y !== 0) ?
+			this.y / Math.abs(this.y) : 1;
 		return signY * Math.acos(this.x / this.magnitude());
 	}
 
@@ -211,6 +243,14 @@ class Vector
 		return this;
 	}
 
+	/**
+	 * Truncates this vector. If this vector's magnitude is greater than l, the
+	 * magnitude will be reduced to l. If this vector's magnitude is less than l,
+	 * it will not be altered.
+	 * @method limit
+	 * @param  {Number} l magnitude to truncate by
+	 * @return {Vector}   a reference to this vector after the truncation
+	 */
 	limit(l)
 	{
 		if (this.magnitude() > l)
@@ -254,19 +294,34 @@ class Vector
 		return new Vector(this.x, this.y);
 	}
 
-	static generatePointWithinRect(min, max)
-	{
-		const delta = Vector.subtract(max, min);
-
-		const x = Math.random() * delta.x + min.x;
-		const y = Math.random() * delta.y + min.y;
-
-		return new Vector(x, y);
-	}
-
+	/**
+	 * Checks if this Vector is within a rectanglular area
+	 * @method isWithinRect
+	 * @param  {Vector}     min top left corner
+	 * @param  {Vector}     max bottom right corner
+	 * @return {Boolean}        true if this Vector is within the bounds presented
+	 * 													by min and max
+	 */
 	isWithinRect(min, max)
 	{
 		return (min.x < this.x && min.y < this.y &&
 			max.x > this.x && max.y > this.y);
+	}
+
+	/**
+	 * Rotate this vector by theta (in radians)
+	 * @method rotate
+	 * @param  {Number} theta angle to rotate by in radians
+	 * @return {Vector}       a reference to this Vector after rotation
+	 */
+	rotate(theta)
+	{
+		const x = this.x * Math.cos(theta) - this.y * Math.sin(theta);
+		const y = this.x * Math.sin(theta) + this.y * Math.cos(theta);
+
+		this.x = x;
+		this.y = y;
+
+		return this;
 	}
 }
