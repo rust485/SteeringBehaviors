@@ -80,15 +80,8 @@ class WanderBehavior extends Behavior
     return circleCenter.add(displacement);
   }
 
-  update()
+  getSteering()
   {
-    if (this.ctx === null)
-      return this.ctx;
-
-    const steering = this.calculateWanderForce();
-
-    this.ctx.updateVelocity(steering);
-    this.ctx.move();
-    return this.ctx;
+    return this.calculateWanderForce();
   }
 }

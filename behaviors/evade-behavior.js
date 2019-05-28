@@ -33,12 +33,10 @@ class EvadeBehavior extends Behavior
     return this.predictionTuning = tuning;
   }
 
-  update()
+  getSteering()
   {
-    super.update();
-
-    if (this.ctx === null || this.avoid === null)
-      return;
+    if (this.avoid === null)
+      return new Vector(0, 0);
 
     const distToTarget = Vector.subtract(this.avoid.getPosition(),
       this.ctx.getPosition()).magnitude();
@@ -51,12 +49,8 @@ class EvadeBehavior extends Behavior
     const desiredVelocity = Vector.subtract(predictedTargetPos, this.ctx.getPosition())
       .setMagnitude(this.ctx.getMaxSpeed());
 
-    const steering = Vector.subtract(desiredVelocity, this.ctx.getVelocity())
+    return Vector.subtract(desiredVelocity, this.ctx.getVelocity())
       .scale(-1);
-
-    this.ctx.updateVelocity(steering);
-    this.ctx.move();
-    return this.ctx;
   }
 
   static predictPosition(position, velocity, time)

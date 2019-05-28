@@ -17,21 +17,17 @@ class FleeBehavior extends Behavior
     return this.avoid;
   }
 
-  update()
+  getSteering()
   {
-    if (this.ctx === null || this.avoid === null)
-      return this.ctx;
+    if (this.avoid === null)
+      return new Vector(0, 0);
 
     const avoidPos = new Vector(this.avoid.getX(), this.avoid.getY());
 
     const desiredVelocity = Vector.subtract(avoidPos, this.ctx.getPosition())
       .setMagnitude(this.ctx.getMaxSpeed());
 
-    const steering = Vector.subtract(desiredVelocity, this.ctx.getVelocity())
+    return Vector.subtract(desiredVelocity, this.ctx.getVelocity())
       .scale(-1);
-
-    this.ctx.updateVelocity(steering);
-    this.ctx.move();
-    return this.ctx;
   }
 }

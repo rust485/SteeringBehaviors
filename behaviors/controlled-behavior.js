@@ -6,7 +6,7 @@ const NONE = new Vector(0, 0);
 
 class ControlledBehavior extends Behavior
 {
-  update()
+  getSteering()
   {
     let desiredHoriz = new Vector(this.ctx.getVelocity().x, 0).scale(-1);
     if (keyIsDown(LEFT_ARROW))
@@ -20,9 +20,6 @@ class ControlledBehavior extends Behavior
     else if (keyIsDown(DOWN_ARROW))
       desiredVert = DOWN.clone();
 
-    const desired = Vector.add(desiredVert, desiredHoriz);
-
-    this.ctx.updateVelocity(desired);
-    this.ctx.move();
+    return Vector.add(desiredVert, desiredHoriz);
   }
 }

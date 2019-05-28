@@ -33,13 +33,10 @@ class PursuitBehavior extends Behavior
     return this.predictionTuning = tuning;
   }
 
-  update()
+  getSteering()
   {
-    super.update();
-
-    if (this.ctx === null || this.target === null)
-      return;
-
+    if (this.target === null)
+      return new Vector(0, 0);
     const distToTarget = Vector.subtract(this.target.getPosition(),
       this.ctx.getPosition()).magnitude();
 
@@ -56,12 +53,7 @@ class PursuitBehavior extends Behavior
     if (distToTarget <= stoppingDistance)
       desiredVelocity.setMagnitude(this.ctx.maxSpeed * distToTarget / stoppingDistance);
 
-
-    const steering = Vector.subtract(desiredVelocity, this.ctx.getVelocity());
-
-    this.ctx.updateVelocity(steering);
-    this.ctx.move();
-    return this.ctx;
+    return Vector.subtract(desiredVelocity, this.ctx.getVelocity());
   }
 
   static predictPosition(position, velocity, time)
