@@ -147,8 +147,19 @@ class Entity
 
   render(pos)
   {
-    return DisplayUtils.drawTriangle(pos,
+    DisplayUtils.drawTriangle(pos,
       this.forward.angleFromPositiveXAxis(), this.size, this.color);
+
+    // need to do these relative to pos
+    const forwardEnd = Vector.add(pos, this.forward.clone().scale(this.viewDistance));
+    DisplayUtils.drawLine(pos, forwardEnd, DisplayUtils.colorLookup.BLUE);
+
+    const theta = this.fov * Math.PI / 180;
+    const leftFov = Vector.add(pos, this.forward.clone().rotate(theta / 2).scale(this.viewDistance));
+    DisplayUtils.drawLine(pos, leftFov, DisplayUtils.colorLookup.GREEN);
+
+    const rightFov = Vector.add(pos, this.forward.clone().rotate(-theta / 2).scale(this.viewDistance));
+    DisplayUtils.drawLine(pos, rightFov, DisplayUtils.colorLookup.GREEN);
   }
 
   getX()

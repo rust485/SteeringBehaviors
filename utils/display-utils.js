@@ -17,13 +17,21 @@ class DisplayUtils
 
     push();
     fill(color);
-    translate(center.x, center.y);
+    translate(center.getX(), center.getY());
     rotate(rotation);
-    triangle(front.x, front.y, bl.x, bl.y, br.x, br.y);
+    triangle(front.getX(), front.getY(), bl.getX(), bl.getY(), br.getX(), br.getY());
     pop();
   }
 
-  drawShape(points, center, rotation, color)
+  static drawLine(p1, p2, color)
+  {
+    push();
+    stroke(color);
+    line(p1.getX(), p1.getY(), p2.getX(), p2.getY());
+    pop();
+  }
+
+  static drawShape(points, center, rotation, color)
   {
     push();
     fill(color);
