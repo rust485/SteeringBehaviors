@@ -3,6 +3,8 @@ class Entity
   static DEFAULT_MASS = 1;
   static DEFAULT_SIZE = 5;
   static DIR_RIGHT = new Vector(1, 0);
+  static DEFAULT_FOV = 120;
+  static DEFAULT_VIEW_DISTANCE = 80;
 
   constructor(maxSpeed, maxForce, position, velocity, color, options={})
   {
@@ -17,6 +19,8 @@ class Entity
     this.mass = (options.mass !== undefined) ? options.mass : Entity.DEFAULT_MASS;
     this.size = (options.size !== undefined) ? options.size : Entity.DEFAULT_SIZE;
     this.target = (options.target !== undefined) ? options.target : null;
+    this.fov = (options.fov !== undefined) ? options.fov : Entity.DEFAULT_FOV;
+    this.viewDistance = (options.viewDistance !== undefined) ? options.viewDistance : Entity.DEFAULT_VIEW_DISTANCE;
 
     this.behavior = (options.behavior !== undefined) ? options.behavior : new Behavior();
     this.behavior.setContext(this);
@@ -189,5 +193,19 @@ class Entity
     const br = Vector.add(this.position, d);
 
     return tl.isWithinRect(min, max) || br.isWithinRect(min, max);
+  }
+
+  canSee(targ)
+  {
+    const pos = new Vector(targ.getX(), targ.getY());
+
+    return (Vector.subtract(pos, this.position).magnitude() <= this.viewDistance &&
+      this.withinFov(pos))
+
+  }
+
+  withinFov(point)
+  {
+    return ((Math.abs(this.forward.angleBetween(point)) * 180) / Math.PI) <= this.fov / 2;
   }
 }
