@@ -17,54 +17,58 @@ class BehaviorManagerFactory
     const seekingState = new BehaviorState(ctx, new SeekBehavior(ctx, options));
 
     wanderingState.checkTransition = (manager) => {
-      const ctxTarget = wanderingState.ctx.getTarget();
-      if (ctxTarget === null)
+      const target = wanderingState.getTarget();
+      if (target === null)
         return;
 
-      if (wanderingState.ctx.canSee())
+      if (wanderingState.ctx.canSee(target))
       {
-        pursuingState.setTarget(ctxTarget);
-        manager.setCurrentState(pursuingState);
+        pursuingState.setTarget(target);
+        return manager.setCurrentState(pursuingState);
       }
     };
 
     pursuingState.checkTransition = (manager) => {
       // if the target is no longer set, go back to previous state
-      const ctxTarget = wanderingState.ctx.getTarget();
-      if (pursuingState.target === null)
-        return manager.popCurrentState();
+      const target = pursuingState.getTarget();
+      if (target === null)
+        return manager.exitCurrentState();
 
       // if the target is no longer in view, seek to last known position
       // and remove pursuit state from the history
       if (!pursuingState.ctx.canSee(target))
       {
-        manager.popCurrentState();
+        manager.exitCurrentState();
         // go to the target's last known location
-        seekingState.setTarget(target.getPosition());
-        manager.setCurrentState(seekingState);
+        seekingState.setTarget(target.getPosition().clone());
+        return manager.setCurrentState(seekingState);
       }
     };
 
     seekingState.checkTransition = (manager) => {
-      if (seekingState.target === null)
-        manager.popCurrentState();
+      const target = seekingState.getTarget();
 
-      const targPos = new Vector(seekingState.target.getX(), seekingState.target.getY());
+      if (target === null)
+        return manager.exitCurrentState();
+
+      const targPos = new Vector(target.getX(), target.getY());
 
       // if object this is attached to has sight of the target
       if (seekingState.ctx.canSee(pursuingState.getTarget()))
       {
-        manager.popCurrentState();
-        pursuingState.setTarget(seekingState.ctx.getTarget());
-        manager.setCurrentState(pursuingState);
+        manager.exitCurrentState();
+        return manager.setCurrentState(pursuingState);
       }
 
       // if object this is attached to reaches the target position and cannot see
       // the target, go to the most recent state
       if (seekingState.ctx.getPosition().equals(targPos))
-        manager.popCurrentState();
-
+        return manager.exitCurrentState();
     }
+
+    seekingState.exit = () => {
+      this.target = null;
+    };
 
     return wanderingState;
   }

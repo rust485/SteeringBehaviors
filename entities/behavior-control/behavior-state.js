@@ -7,6 +7,21 @@ class BehaviorState
     this.behavior = behavior;
   }
 
+  getContext()
+  {
+    return this.ctx;
+  }
+
+  setContext(ctx)
+  {
+    return this.ctx = ctx;
+  }
+
+  getBehavior()
+  {
+    return this.behavior;
+  }
+
   enter()
   {
     return null;
@@ -27,19 +42,17 @@ class BehaviorState
     return null;
   }
 
-  setTarget(targ)
+  setTarget(t)
   {
-    if (this.behavior !== undefined && this.behavior.setTarget !== undefined)
-      this.behavior.setTarget(targ);
-
-    return this;
+    if (this.behavior !== undefined)
+      return this.behavior.setTarget(t);
+    return null;
   }
 
   getTarget()
   {
-    if (this.behavior.getTarget !== undefined)
+    if (this.behavior !== undefined)
       return this.behavior.getTarget();
-
     return null;
   }
 }

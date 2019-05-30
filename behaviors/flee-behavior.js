@@ -2,7 +2,7 @@ class FleeBehavior extends Behavior
 {
   getSteering()
   {
-    const avoid = this.ctx.getAvoid();
+    const avoid = this.getAvoid();
     if (avoid === null)
       return new Vector(0, 0);
 

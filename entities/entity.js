@@ -233,6 +233,9 @@ class Entity
 
   withinFov(point)
   {
-    return ((Math.abs(this.forward.angleBetween(point)) * 180) / Math.PI) <= this.fov / 2;
+    const relativePoint = Vector.subtract(point, this.position);
+    const rads = Math.abs(this.forward.angleBetween(relativePoint));
+    const degs = rads * 180 / Math.PI;
+    return degs <= this.fov / 2;
   }
 }

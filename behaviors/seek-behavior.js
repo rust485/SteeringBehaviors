@@ -2,7 +2,7 @@ class SeekBehavior extends Behavior
 {
   getSteering()
   {
-    const target = this.ctx.getTarget();
+    const target = this.getTarget();
     if (target === null)
       return new Vector(0, 0);
 

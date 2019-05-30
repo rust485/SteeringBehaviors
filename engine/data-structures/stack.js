@@ -27,7 +27,7 @@ class Stack
 
   pop()
   {
-    if (this.isEmtpy())
+    if (this.isEmpty())
       return null;
     return this.elements.pop();
   }

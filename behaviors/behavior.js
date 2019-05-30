@@ -5,6 +5,8 @@ class Behavior
     this.ctx = ctx;
     this.target = (options.target !== undefined) ?
       options.target : null;
+    this.avoid = (options.avoid !== undefined) ?
+      options.avoid : null;
   }
 
   setContext(ctx)
@@ -19,17 +21,24 @@ class Behavior
 
   getTarget()
   {
-    // the target of this behavior is chosen by deciding if the behavior
-    // has been explicitly assigned a target, and if not then the behavior's
-    // target is whatever the object it is attached to is targeting
-    if (this.target === null)
-      return this.ctx.getTarget();
-    return this.target;
+    return (this.target === null) ?
+      this.ctx.getTarget() : this.target;
   }
 
   setTarget(t)
   {
     return this.target = t;
+  }
+
+  getAvoid()
+  {
+    return (this.avoid === null) ?
+      this.ctx.getAvoid() : this.avoid;
+  }
+
+  setAvoid(a)
+  {
+    return this.avoid = a;
   }
 
   getSteering()

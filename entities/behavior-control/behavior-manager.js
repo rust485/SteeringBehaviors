@@ -29,7 +29,7 @@ class BehaviorManager
     return this;
   }
 
-  endCurrentState()
+  exitCurrentState()
   {
     const state = this.stack.pop();
     state.exit();
