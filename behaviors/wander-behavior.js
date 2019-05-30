@@ -50,7 +50,7 @@ class WanderBehavior extends Behavior
     return this.wanderAngle;
   }
 
-  setWandeAngle(angle)
+  setWanderAngle(angle)
   {
     return this.wanderAngle = angle;
   }
