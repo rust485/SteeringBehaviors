@@ -21,15 +21,16 @@ class BehaviorManagerFactory
       if (ctxTarget === null)
         return;
 
-      if (wanderingState.ctx.canSee(target))
+      if (wanderingState.ctx.canSee())
       {
-        pursuingState.setTarget(target);
+        pursuingState.setTarget(ctxTarget);
         manager.setCurrentState(pursuingState);
       }
     };
 
     pursuingState.checkTransition = (manager) => {
       // if the target is no longer set, go back to previous state
+      const ctxTarget = wanderingState.ctx.getTarget();
       if (pursuingState.target === null)
         return manager.popCurrentState();
 

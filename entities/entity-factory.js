@@ -229,7 +229,7 @@ class EntityFactory
 
     e.setTarget(options.target);
 
-    const behaviorManager = GenericBehaviorManagerFactory.createGenericBehaviorManager(e, options);
+    const behaviorManager = BehaviorManagerFactory.createBehaviorManager(e, options);
 
     e.setBehavior(behaviorManager);
 

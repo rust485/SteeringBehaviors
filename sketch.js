@@ -32,12 +32,12 @@ const engine = new Engine(new Mouse(), ENGINE_OPTIONS);
 const factory = new EntityFactory(CANVAS_WIDTH, CANVAS_HEIGHT,
 	FACTORY_OPTIONS);
 
-const SEEKERS = 1;
-const PURSUING = 1;
-const FLEEING = 1;
-const WANDERING = 1;
-const EVADING = 1;
-const GENERIC = 0;
+const SEEKERS = 0;
+const PURSUING = 0;
+const FLEEING = 0;
+const WANDERING = 0;
+const EVADING = 0;
+const GENERIC = 1;
 
 function setup()
 {

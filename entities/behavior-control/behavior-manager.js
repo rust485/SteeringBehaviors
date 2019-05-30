@@ -1,7 +1,7 @@
 class BehaviorManager
 {
   // use push down automata?
-  constructor(ctx=null)
+  constructor(ctx=null, options={})
   {
     this.ctx = ctx;
     this.stack = new Stack();
