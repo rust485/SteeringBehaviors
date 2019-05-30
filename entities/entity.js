@@ -19,6 +19,7 @@ class Entity
     this.mass = (options.mass !== undefined) ? options.mass : Entity.DEFAULT_MASS;
     this.size = (options.size !== undefined) ? options.size : Entity.DEFAULT_SIZE;
     this.target = (options.target !== undefined) ? options.target : null;
+    this.avoid = (options.avoid !== undefined) ? options.avoid : null;
     this.fov = (options.fov !== undefined) ? options.fov : Entity.DEFAULT_FOV;
     this.viewDistance = (options.viewDistance !== undefined) ? options.viewDistance : Entity.DEFAULT_VIEW_DISTANCE;
 
@@ -75,14 +76,22 @@ class Entity
 
   setTarget(t)
   {
-    if (this.behavior !== undefined)
-      this.behavior.setTarget(t);
     return this.target = t;
   }
 
   getTarget()
   {
     return this.target;
+  }
+
+  setAvoid(a)
+  {
+    return this.avoid = a;
+  }
+
+  getAvoid()
+  {
+    return this.avoid;
   }
 
   getBehavior()
@@ -147,19 +156,26 @@ class Entity
 
   render(pos)
   {
-    DisplayUtils.drawTriangle(pos,
-      this.forward.angleFromPositiveXAxis(), this.size, this.color);
+    DisplayUtils.drawTriangle(pos, this.forward.angleFromPositiveXAxis(),
+      this.size, this.color);
 
-    // need to do these relative to pos
+    if (window.DEBUG)
+      this.renderDebug(pos);
+  }
+
+  renderDebug(pos)
+  {
     const forwardEnd = Vector.add(pos, this.forward.clone().scale(this.viewDistance));
     DisplayUtils.drawLine(pos, forwardEnd, DisplayUtils.colorLookup.BLUE);
 
+    const fovColor = DisplayUtils.colorLookup.PURPLE;
+
     const theta = this.fov * Math.PI / 180;
     const leftFov = Vector.add(pos, this.forward.clone().rotate(theta / 2).scale(this.viewDistance));
-    DisplayUtils.drawLine(pos, leftFov, DisplayUtils.colorLookup.GREEN);
+    DisplayUtils.drawLine(pos, leftFov, fovColor);
 
     const rightFov = Vector.add(pos, this.forward.clone().rotate(-theta / 2).scale(this.viewDistance));
-    DisplayUtils.drawLine(pos, rightFov, DisplayUtils.colorLookup.GREEN);
+    DisplayUtils.drawLine(pos, rightFov, fovColor);
   }
 
   getX()

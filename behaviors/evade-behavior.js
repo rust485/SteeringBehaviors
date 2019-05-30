@@ -2,25 +2,14 @@ class EvadeBehavior extends Behavior
 {
   static DEFAULT_PREDICTION_TUNING = .1;
 
-  constructor(ctx=null, avoid=null, options={})
+  constructor(ctx=null, options={})
   {
-    super(ctx);
+    super(ctx, options);
 
     // the behavior also has a target, the target of the entity
     // is more of a storage for the main target of the entity
-    this.avoid = avoid;
     this.predictionTuning = (options.predictionTuning !== undefined) ?
       options.predictionTuning : EvadeBehavior.DEFAULT_PREDICTION_TUNING;
-  }
-
-  getAvoid()
-  {
-    return this.avoid;
-  }
-
-  setAvoid(e)
-  {
-    return this.avoid = e;
   }
 
   getPredictionTuning()
@@ -35,16 +24,17 @@ class EvadeBehavior extends Behavior
 
   getSteering()
   {
-    if (this.avoid === null)
+    const avoid = this.ctx.getAvoid();
+    if (avoid === null)
       return new Vector(0, 0);
 
-    const distToTarget = Vector.subtract(this.avoid.getPosition(),
+    const distToTarget = Vector.subtract(avoid.getPosition(),
       this.ctx.getPosition()).magnitude();
 
     const lookAhead = (distToTarget / this.ctx.getMaxSpeed()) * this.predictionTuning;
 
-    const predictedTargetPos = PursuitBehavior.predictPosition(this.avoid.getPosition(),
-      this.avoid.getVelocity(), lookAhead);
+    const predictedTargetPos = PursuitBehavior.predictPosition(avoid.getPosition(),
+      avoid.getVelocity(), lookAhead);
 
     const desiredVelocity = Vector.subtract(predictedTargetPos, this.ctx.getPosition())
       .setMagnitude(this.ctx.getMaxSpeed());

@@ -1,14 +1,32 @@
 class CompositeBehavior extends Behavior
 {
-  constructor(ctx=null, behaviors=[])
+  constructor(ctx=null, options={})
   {
-    this.ctx = ctx;
-    this.behaviors = behaviors;
+    super(ctx, options);
+    this.behaviors = (options.behaviors !== undefined) ?
+      options.behaviors : [];
   }
 
   getBehaviors()
   {
     return this.behaviors;
+  }
+
+  addBehavior(b)
+  {
+    this.behaviors.push(b);
+    return this;
+  }
+
+  removeBehavior(b)
+  {
+    this.behaviors = this.behaviors.filter(behavior => !behavior.equals(b));
+    return this;
+  }
+
+  setBehaviors(b)
+  {
+    this.behaviors = b;
   }
 
   getSteering()

@@ -1,18 +1,17 @@
-const DEFAULT_CIRCLE_DISTANCE = 15;
-const DEFAULT_ANGLE_VARIATION = .7;
-const DEFAULT_CIRCLE_RADIUS = 5;
-
 class WanderBehavior extends Behavior
 {
+  static DEFAULT_CIRCLE_RADIUS = 5;
+  static DEFAULT_CIRCLE_DISTANCE = 15;
+  static DEFAULT_ANGLE_VARIATION = .7;
   constructor(ctx=null, options={})
   {
-    super(ctx);
+    super(ctx, options);
     this.circleDistance = (options.circleDistance !== undefined) ?
-      options.circleDistance : DEFAULT_CIRCLE_DISTANCE;
+      options.circleDistance : WanderBehavior.DEFAULT_CIRCLE_DISTANCE;
     this.angleVariation = (options.angleVariation !== undefined) ?
-      options.angleVariation : DEFAULT_ANGLE_VARIATION;
+      options.angleVariation : WanderBehavior.DEFAULT_ANGLE_VARIATION;
     this.circleRadius = (options.circleRadius !== undefined) ?
-      options.circleRadius : DEFAULT_CIRCLE_RADIUS;
+      options.circleRadius : WanderBehavior.DEFAULT_CIRCLE_RADIUS;
     this.wanderAngle = 0;
   }
 
@@ -65,7 +64,7 @@ class WanderBehavior extends Behavior
   calculateWanderForce()
   {
     if (this.ctx === null)
-      return null;
+      return new Vector(0, 0);
 
     const circleCenter = this.ctx.getVelocity()
       .clone().setMagnitude(this.circleDistance);

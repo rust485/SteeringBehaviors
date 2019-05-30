@@ -32,11 +32,12 @@ const engine = new Engine(new Mouse(), ENGINE_OPTIONS);
 const factory = new EntityFactory(CANVAS_WIDTH, CANVAS_HEIGHT,
 	FACTORY_OPTIONS);
 
-const SEEKERS = 5;
-const PURSUING = 3;
+const SEEKERS = 1;
+const PURSUING = 1;
 const FLEEING = 1;
-const WANDERING = 2;
-const EVADING = 3;
+const WANDERING = 1;
+const EVADING = 1;
+const GENERIC = 0;
 
 function setup()
 {
@@ -50,8 +51,8 @@ function setup()
 function initPlayer()
 {
 	// const player = factory.createControlledEntity(MIN_BOUND, MAX_BOUND);
-	const player = factory.createSeekingEntity({
-		target: engine.getMouse(),
+	const player = factory.createMouseControlledEntity({
+		mouse: engine.getMouse(),
 		speed: PLAYER_SPEED,
 		color: PLAYER_COLOR,
 		bounds
@@ -79,7 +80,7 @@ function initEntities(player)
 	{
 		const entity = factory.createFleeingEntity({ bounds });
 		entity.setColor(DisplayUtils.colorLookup.BLUE);
-		entity.getBehavior().setAvoid(player);
+		entity.setAvoid(player);
 		engine.addEntity(entity);
 	}
 
@@ -102,7 +103,14 @@ function initEntities(player)
 	{
 		const entity = factory.createEvadingEntity({ bounds });
 		entity.setColor(DisplayUtils.colorLookup.PURPLE);
-		entity.getBehavior().setAvoid(player);
+		entity.setAvoid(player);
+		engine.addEntity(entity);
+	}
+
+	for (let i = 0; i < GENERIC; i++)
+	{
+		const entity = factory.createGenericEntity({ bounds, target: player });
+		entity.setColor(DisplayUtils.colorLookup.WHITE);
 		engine.addEntity(entity);
 	}
 }
@@ -119,7 +127,6 @@ function mousePressed()
 
 	entity.setTarget(engine.getEntities(PLAYER_TAG)[0]);
 
-	entity.getBehavior().setTarget(entity.getTarget());
 	engine.addEntity(entity);
 }
 

@@ -26,4 +26,20 @@ class BehaviorState
   {
     return null;
   }
+
+  setTarget(targ)
+  {
+    if (this.behavior !== undefined && this.behavior.setTarget !== undefined)
+      this.behavior.setTarget(targ);
+
+    return this;
+  }
+
+  getTarget()
+  {
+    if (this.behavior.getTarget !== undefined)
+      return this.behavior.getTarget();
+
+    return null;
+  }
 }

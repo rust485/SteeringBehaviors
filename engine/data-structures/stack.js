@@ -34,7 +34,7 @@ class Stack
 
   peek()
   {
-    if (this.isEmtpy())
+    if (this.isEmpty())
       return null;
     return this.elements[this.elements.length - 1];
   }

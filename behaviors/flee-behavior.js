@@ -1,28 +1,12 @@
 class FleeBehavior extends Behavior
 {
-  constructor(ctx=null, avoid=null)
-  {
-    super(ctx);
-
-    this.avoid = avoid;
-  }
-
-  setAvoid(e)
-  {
-    return this.avoid = e;
-  }
-
-  getAvoid()
-  {
-    return this.avoid;
-  }
-
   getSteering()
   {
-    if (this.avoid === null)
+    const avoid = this.ctx.getAvoid();
+    if (avoid === null)
       return new Vector(0, 0);
 
-    const avoidPos = new Vector(this.avoid.getX(), this.avoid.getY());
+    const avoidPos = new Vector(avoid.getX(), avoid.getY());
 
     const desiredVelocity = Vector.subtract(avoidPos, this.ctx.getPosition())
       .setMagnitude(this.ctx.getMaxSpeed());

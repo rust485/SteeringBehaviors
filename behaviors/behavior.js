@@ -1,6 +1,6 @@
 class Behavior
 {
-  constructor(ctx=null)
+  constructor(ctx=null, options={})
   {
     this.ctx = ctx;
   }
@@ -8,6 +8,11 @@ class Behavior
   setContext(ctx)
   {
     return this.ctx = ctx;
+  }
+
+  getContext()
+  {
+    return this.ctx;
   }
 
   getSteering()
@@ -22,10 +27,5 @@ class Behavior
     this.ctx.updateVelocity(desired);
     this.ctx.move();
     return this.ctx;
-  }
-
-  setTarget()
-  {
-    return undefined;
   }
 }

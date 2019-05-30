@@ -91,7 +91,8 @@ class EntityFactory
     if (options.position)
       return options.position;
 
-    else if (options.bounds.max !== undefined &&
+    else if (options.bounds !== undefined &&
+      options.bounds.max !== undefined &&
       options.bounds.min !== undefined)
       return EntityFactory.generatePointWithinRect(options.bounds.min,
         options.bounds.max);
@@ -141,14 +142,8 @@ class EntityFactory
 
   createMouseControlledEntity(options={})
   {
-    const behavior = new SeekBehavior();
-    behavior.setTarget(mouse);
-
-    const pos = EntityFactory.decidePosition(options);
-
-    const ops = this.parseOptions(options);
-
-    return this.createEntityWithBehavior(pos, behavior, ops);
+    options.target = options.mouse;
+    return this.createSeekingEntity(options);
   }
 
   createSeekingEntity(options={})
@@ -220,6 +215,23 @@ class EntityFactory
     const e = this.createEntityWithBehavior(pos, behavior, ops);
 
     if (options.avoid !== undefined) e.setAvoid(options.avoid);
+
+    return e;
+  }
+
+  createGenericEntity(options={})
+  {
+    const pos = EntityFactory.decidePosition(options);
+
+    const ops = this.parseOptions(options);
+
+    const e = this.createEntityWithBehavior(pos, undefined, ops);
+
+    e.setTarget(options.target);
+
+    const behaviorManager = GenericBehaviorManagerFactory.createGenericBehaviorManager(e, options);
+
+    e.setBehavior(behaviorManager);
 
     return e;
   }
