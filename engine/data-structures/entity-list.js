@@ -38,9 +38,9 @@ class EntityList
     const array = [];
     const keys = Object.keys(this.map);
 
-    for (let i = 0; i < keys.length; i++)
-      if (cond(this.map[keys[i]]))
-        array.push(this.map[keys[i]]);
+    for (let key of keys)
+      if (cond(this.map[key]))
+        array.push(this.map[key]);
 
     return array;
   }

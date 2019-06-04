@@ -1,3 +1,5 @@
+const DEBUG_MOUSE_POSITION = 'mouse-position';
+
 const CANVAS_WIDTH = 800;
 const CANVAS_HEIGHT = 800;
 
@@ -26,7 +28,7 @@ const max = new Vector(CANVAS_WIDTH, CANVAS_HEIGHT);
 
 const bounds = { min, max };
 
-let fps = 80;
+const fps = 80;
 
 const engine = new Engine(new Mouse(), ENGINE_OPTIONS);
 const factory = new EntityFactory(CANVAS_WIDTH, CANVAS_HEIGHT,
@@ -130,8 +132,17 @@ function mousePressed()
 	engine.addEntity(entity);
 }
 
+function showDebugPanel()
+{
+	const mousePos = document.getElementById(DEBUG_MOUSE_POSITION);
+	mousePos.textContent = 'Mouse Position: ' + engine.getMouse().getPosition();
+}
+
 function draw()
 {
   engine.update();
   engine.render();
+
+	if (window.DEBUG)
+		showDebugPanel();
 }

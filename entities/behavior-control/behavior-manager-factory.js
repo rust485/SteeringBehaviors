@@ -12,7 +12,7 @@ class BehaviorManagerFactory
 
   static createBehaviorStates(ctx, options)
   {
-    const wanderingState = new BehaviorState(ctx, new WanderBehavior(ctx));
+    const wanderingState = new BehaviorState(ctx, new WanderBehavior(ctx, options));
     const pursuingState = new BehaviorState(ctx, new PursuitBehavior(ctx, options));
     const seekingState = new BehaviorState(ctx, new SeekBehavior(ctx, options));
 

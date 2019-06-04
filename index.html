@@ -26,6 +26,12 @@
   <script src="./engine/mouse.js"></script>
   <script src="./engine/camera.js"></script>
 
+  <script src="./engine/geometry/line.js"></script>
+  <script src="./engine/geometry/ray.js"></script>
+  <script src="./engine/geometry/shapes/polygon.js"></script>
+  <script src="./engine/geometry/shapes/shape-factory.js"></script>
+  <script src="./engine/geometry/geometry-utils.js"></script>
+
   <script src="./engine/data-structures/entity-list.js"></script>
 
   <script src="./engine/engine.js"></script>
@@ -33,6 +39,10 @@
 </head>
 
 <body>
+  <div>
+    <title>DEBUG</title>
+    <p id='mouse-position'>Mouse Position: (0, 0)</p>
+  </div>
   <!-- Execute the main script -->
   <script>
     window.DEBUG = true;

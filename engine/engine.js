@@ -78,8 +78,8 @@ class Engine
 
   render()
   {
-    const cam = this.camera;
-    const ents = this.entities.getEntitiesByCondition((obj) => this.camera.withinWindow(obj));
+    const ents = this.entities.getEntitiesByCondition((obj) =>
+      this.camera.withinWindow(obj));
 
     this.camera.render(ents);
   }

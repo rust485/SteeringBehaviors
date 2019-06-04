@@ -17,7 +17,7 @@ class Entity
     this.velocity = velocity;
 
     this.mass = (options.mass !== undefined) ? options.mass : Entity.DEFAULT_MASS;
-    this.size = (options.size !== undefined) ? options.size : Entity.DEFAULT_SIZE;
+
     this.target = (options.target !== undefined) ? options.target : null;
     this.avoid = (options.avoid !== undefined) ? options.avoid : null;
     this.fov = (options.fov !== undefined) ? options.fov : Entity.DEFAULT_FOV;
@@ -31,6 +31,8 @@ class Entity
     this.color = color;
 
     this.forward = Entity.DIR_RIGHT.clone();
+    const size = (options.size !== undefined) ? options.size : Entity.DEFAULT_SIZE;
+    this.graphic = ShapeFactory.getTriangle(size);
   }
 
   getTags()
@@ -149,6 +151,16 @@ class Entity
     return this.mass;
   }
 
+  getGraphic()
+  {
+    return this.graphic;
+  }
+
+  setGraphic(graphic)
+  {
+    return this.graphic = graphic;
+  }
+
   setMass(m)
   {
     return this.mass = m;
@@ -156,8 +168,8 @@ class Entity
 
   render(pos)
   {
-    DisplayUtils.drawTriangle(pos, this.forward.angleFromPositiveXAxis(),
-      this.size, this.color);
+    const rotation = this.forward.angleFromPositiveXAxis();
+    this.graphic.render(pos, rotation, this.color);
 
     if (window.DEBUG)
       this.renderDebug(pos);
@@ -210,16 +222,9 @@ class Entity
     return dist;
   }
 
-  within(min, max)
+  within(boundingArea)
   {
-    // can later do something more fancy, for now will just do a
-    // square of size 2 * this.size
-    const r = this.size * 2;
-    const d = new Vector(r, r);
-    const tl = Vector.subtract(this.position, d);
-    const br = Vector.add(this.position, d);
-
-    return tl.isWithinRect(min, max) || br.isWithinRect(min, max);
+    return true;
   }
 
   canSee(targ)

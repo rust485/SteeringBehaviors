@@ -32,16 +32,18 @@ class DisplayUtils
     pop();
   }
 
-  static drawShape(points, center, rotation, color)
+  static translateAndDrawPolygon(vertices, color)
   {
     push();
     fill(color);
-    translate(center.x, center.y);
-    rotate(rotation);
+    stroke(color);
 
-    for (let i = 0; i < this.points.length; i++)
-      vertex(points[i].getX(), points[i].getY());
+    beginShape();
 
+    for (let vert of vertices)
+      vertex(vert.getX(), vert.getY());
+
+    endShape(CLOSE);
     pop();
   }
 }

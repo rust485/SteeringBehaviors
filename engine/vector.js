@@ -324,4 +324,24 @@ class Vector
 
 		return this;
 	}
+
+	translate(translation)
+	{
+		return this.add(translation);
+	}
+
+	static translate(vector, translation)
+	{
+		return Vector.add(vector, translation);
+	}
+
+	static rotate(vector, theta)
+	{
+		return vector.clone().rotate(theta);
+	}
+
+	toString()
+	{
+		return '(' + this.x + ', ' + this.y + ')';
+	}
 }

@@ -1,0 +1,4 @@
+function raycast(direction, maxDistance)
+{
+
+}

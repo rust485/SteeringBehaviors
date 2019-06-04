@@ -130,8 +130,8 @@ class Camera
   render(renderList)
   {
     background(0);
-    for (let i = 0; i < renderList.length; i++)
-      renderList[i].render(this.translateToScreenPosition(renderList[i].getPosition()));
+    for (let obj of renderList)
+      obj.render(this.translateToScreenPosition(obj.getPosition()));
   }
 
   static withinWindow(obj, topLeft, topRight)
