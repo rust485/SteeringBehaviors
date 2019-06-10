@@ -33,7 +33,7 @@ class Entity
     const size = (options.size !== undefined) ? options.size : Entity.DEFAULT_SIZE;
 
     this.graphic = ShapeFactory.getTriangle(size, this.position.clone(), this.getRotation());
-    this.collider = new Collider(this.graphic.clone());
+    this.collider = new Collider(ShapeFactory.getTriangle(size, this.position.clone(), this.getRotation()));
   }
 
   getRotation()
@@ -125,8 +125,10 @@ class Entity
   setForward(forward)
   {
     this.forward = forward;
-    this.graphic.setRotation(this.getRotation());
-    this.collider.setRotation(this.getRotation());
+
+    const rot = this.getRotation();
+    this.graphic.setRotation(rot);
+    this.collider.setRotation(rot);
     return this.forward;
   }
 

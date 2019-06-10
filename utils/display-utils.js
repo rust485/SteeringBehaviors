@@ -36,10 +36,11 @@ class DisplayUtils
   {
     push();
 
-    if (options.stroke !== undefined)
-      stroke(options.stroke);
-    if (options.fill !== undefined)
-      fill(options.fill);
+    (options.stroke !== undefined) ?
+      stroke(options.stroke) : noStroke();
+
+    (options.fill !== undefined) ?
+      fill(options.fill) : noFill();
 
     beginShape();
 

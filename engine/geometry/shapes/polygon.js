@@ -22,7 +22,8 @@ class Polygon
     this.position = new Vector(0, 0);
     this.rotation = 0;
 
-    this.init(position, rotation);
+    if (process)
+      this.init(position, rotation);
   }
 
   init(position, rotation)
@@ -138,6 +139,7 @@ class Polygon
    */
   clone()
   {
+    // this doesn't work for some reason
     const verts = [];
     for (let vertex of this.vertices)
       verts.push(vertex.clone());
