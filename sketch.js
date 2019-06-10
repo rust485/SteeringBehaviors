@@ -1,10 +1,12 @@
+Display.setInstance(new P5DisplayAdapter());
+
 const DEBUG_MOUSE_POSITION = 'mouse-position';
 
 const CANVAS_WIDTH = 800;
 const CANVAS_HEIGHT = 800;
 
 const PLAYER_SPEED = 5.0;
-const PLAYER_COLOR = DisplayUtils.colorLookup.GREEN;
+const PLAYER_COLOR = Display.getInstance().color.GREEN;
 const PLAYER_TAG = 'player';
 
 const ENGINE_OPTIONS = {
@@ -70,10 +72,11 @@ function initPlayer()
 
 function initEntities(player)
 {
+	const disp = Display.getInstance();
 	for (let i = 0; i < SEEKERS; i++)
 	{
 		const entity = factory.createSeekingEntity({ bounds });
-		entity.setColor(DisplayUtils.colorLookup.RED);
+		entity.setColor(disp.color.RED);
 		entity.setTarget(player);
 		engine.addEntity(entity);
 	}
@@ -81,7 +84,7 @@ function initEntities(player)
 	for (let i = 0; i < FLEEING; i++)
 	{
 		const entity = factory.createFleeingEntity({ bounds });
-		entity.setColor(DisplayUtils.colorLookup.BLUE);
+		entity.setColor(disp.color.BLUE);
 		entity.setAvoid(player);
 		engine.addEntity(entity);
 	}
@@ -89,14 +92,14 @@ function initEntities(player)
 	for (let i = 0; i < WANDERING; i++)
 	{
 		const entity = factory.createWanderingEntity({ bounds });
-		entity.setColor(DisplayUtils.colorLookup.YELLOW);
+		entity.setColor(disp.color.YELLOW);
 		engine.addEntity(entity);
 	}
 
 	for (let i = 0; i < PURSUING; i++)
 	{
 		const entity = factory.createPursuingEntity({ bounds });
-		entity.setColor(DisplayUtils.colorLookup.PINK);
+		entity.setColor(disp.color.PINK);
 		entity.setTarget(player);
 		engine.addEntity(entity);
 	}
@@ -104,7 +107,7 @@ function initEntities(player)
 	for (let i = 0; i < EVADING; i++)
 	{
 		const entity = factory.createEvadingEntity({ bounds });
-		entity.setColor(DisplayUtils.colorLookup.PURPLE);
+		entity.setColor(disp.color.PURPLE);
 		entity.setAvoid(player);
 		engine.addEntity(entity);
 	}
@@ -112,7 +115,7 @@ function initEntities(player)
 	for (let i = 0; i < GENERIC; i++)
 	{
 		const entity = factory.createGenericEntity({ bounds, target: player });
-		entity.setColor(DisplayUtils.colorLookup.WHITE);
+		entity.setColor(disp.color.WHITE);
 		engine.addEntity(entity);
 	}
 }

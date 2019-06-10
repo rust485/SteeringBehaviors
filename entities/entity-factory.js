@@ -1,29 +1,28 @@
-const DEFAULT_MAX_SPEED = 5.0;
-const DEFAULT_MAX_FORCE = 3.0;
-const DEFAULT_MASS = 1.0;
-const DEFAULT_SIZE = 5.0;
-const DEFAULT_COLOR = DisplayUtils.colorLookup.RED;
-
 const ORIGIN = new Vector(0, 0);
 
 const INITIAL_VELOCITY = new Vector(0, 0);
 
 class EntityFactory
 {
+  static DEFAULT_MAX_SPEED = 5.0;
+  static DEFAULT_MAX_FORCE = 3.0;
+  static DEFAULT_MASS = 1.0;
+  static DEFAULT_SIZE = 5.0;
+
   constructor(boundX, boundY, options={})
   {
     this.bounds = new Vector(boundX, boundY);
 
     this.maxSpeed = (options.maxSpeed !== undefined) ?
-      options.maxSpeed : DEFAULT_MAX_SPEED;
+      options.maxSpeed : EntityFactory.DEFAULT_MAX_SPEED;
     this.maxForce = (options.maxForce !== undefined) ?
-      options.maxForce : DEFAULT_MAX_FORCE;
+      options.maxForce : EntityFactory.DEFAULT_MAX_FORCE;
     this.mass = (options.mass !== undefined) ?
-      options.mass : DEFAULT_MASS;
+      options.mass : EntityFactory.DEFAULT_MASS;
     this.size = (options.size !== undefined) ?
-      options.size : DEFAULT_SIZE;
+      options.size : EntityFactory.DEFAULT_SIZE;
     this.color = (options.color !== undefined) ?
-      options.color : DEFAULT_COLOR;
+      options.color : Display.getInstance().color.RED;
   }
 
   getRandomSpeed()

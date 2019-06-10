@@ -202,17 +202,18 @@ class Entity
 
   renderDebug(screenPos)
   {
+    const disp = Display.getInstance();
     const forwardEnd = Vector.add(screenPos, this.forward.clone().scale(this.viewDistance));
-    DisplayUtils.drawLine(screenPos, forwardEnd, DisplayUtils.colorLookup.BLUE);
+    disp.drawLine(screenPos, forwardEnd, disp.color.BLUE);
 
-    const fovColor = DisplayUtils.colorLookup.PURPLE;
+    const fovColor = disp.color.PURPLE;
 
     const theta = this.fov * Math.PI / 180;
     const leftFov = Vector.add(screenPos, this.forward.clone().rotate(theta / 2).scale(this.viewDistance));
-    DisplayUtils.drawLine(screenPos, leftFov, fovColor);
+    disp.drawLine(screenPos, leftFov, fovColor);
 
     const rightFov = Vector.add(screenPos, this.forward.clone().rotate(-theta / 2).scale(this.viewDistance));
-    DisplayUtils.drawLine(screenPos, rightFov, fovColor);
+    disp.drawLine(screenPos, rightFov, fovColor);
 
     this.collider.render(screenPos);
   }

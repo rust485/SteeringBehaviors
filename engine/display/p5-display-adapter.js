@@ -1,6 +1,6 @@
-class DisplayUtils
+class P5DisplayAdapter extends IDisplayAdapter
 {
-  static colorLookup = {
+  color = {
     RED: 'red',
     BLUE: 'blue',
     GREEN: 'green',
@@ -10,7 +10,7 @@ class DisplayUtils
     WHITE: 'white',
   }
 
-  static drawTriangle(center, rotation, d, color)
+  drawTriangle(center, rotation, d, color)
   {
     const front = new Vector(d, 0);
     const bl = new Vector(-d, -d); // back left
@@ -24,7 +24,7 @@ class DisplayUtils
     pop();
   }
 
-  static drawLine(p1, p2, color)
+  drawLine(p1, p2, color)
   {
     push();
     stroke(color);
@@ -32,7 +32,7 @@ class DisplayUtils
     pop();
   }
 
-  static drawPolygon(vertices, options={})
+  drawPolygon(vertices, options={})
   {
     push();
 

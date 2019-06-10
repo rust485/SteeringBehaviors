@@ -124,7 +124,7 @@ class Polygon
   {
     const translation = Vector.subtract(screenPos, this.position);
     const vertsInScreen = this.getTranslatedVertices(translation);
-    return DisplayUtils.drawPolygon(vertsInScreen, options)
+    return Display.getInstance().drawPolygon(vertsInScreen, options)
   }
 
   withinRect(rect)

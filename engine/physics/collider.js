@@ -77,7 +77,7 @@ class Collider
   render(screenPos)
   {
     const options = {
-      stroke: DisplayUtils.colorLookup.PURPLE,
+      stroke: Display.getInstance().color.PURPLE,
     };
 
     return this.shape.render(screenPos, options);
