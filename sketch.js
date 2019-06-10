@@ -34,12 +34,12 @@ const engine = new Engine(new Mouse(), ENGINE_OPTIONS);
 const factory = new EntityFactory(CANVAS_WIDTH, CANVAS_HEIGHT,
 	FACTORY_OPTIONS);
 
-const SEEKERS = 3;
-const PURSUING = 3;
-const FLEEING = 3;
-const WANDERING = 3;
-const EVADING = 3;
-const GENERIC = 3;
+const SEEKERS = 0;
+const PURSUING = 0;
+const FLEEING = 0;
+const WANDERING = 0;
+const EVADING = 0;
+const GENERIC = 0;
 
 function setup()
 {
@@ -135,7 +135,7 @@ function mousePressed()
 function showDebugPanel()
 {
 	const mousePos = document.getElementById(DEBUG_MOUSE_POSITION);
-	mousePos.textContent = 'Mouse Position: ' + engine.getMouse().getPosition();
+	mousePos.textContent = 'Mouse in World Position: ' + engine.getMouse().getPosition();
 }
 
 function draw()
@@ -143,6 +143,5 @@ function draw()
   engine.update();
   engine.render();
 
-	if (window.DEBUG)
-		showDebugPanel();
+	showDebugPanel();
 }

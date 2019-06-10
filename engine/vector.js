@@ -325,19 +325,21 @@ class Vector
 		return this;
 	}
 
-	translate(translation)
-	{
-		return this.add(translation);
-	}
-
-	static translate(vector, translation)
-	{
-		return Vector.add(vector, translation);
-	}
-
 	static rotate(vector, theta)
 	{
 		return vector.clone().rotate(theta);
+	}
+
+	static scale(v, s)
+	{
+		return v.clone().scale(s);
+	}
+
+	set(x, y)
+	{
+		this.x = x;
+		this.y = y;
+		return this;
 	}
 
 	toString()

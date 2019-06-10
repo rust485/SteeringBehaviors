@@ -8,10 +8,8 @@ class Entity
 
   constructor(maxSpeed, maxForce, position, velocity, color, options={})
   {
-    // mass=1, behavior=new Behavior(), target=undefined
-
     this.maxSpeed = maxSpeed;
-    this.maxForce = maxForce; // essentially max acceleration
+    this.maxForce = maxForce;
 
     this.position = position;
     this.velocity = velocity;
@@ -31,8 +29,16 @@ class Entity
     this.color = color;
 
     this.forward = Entity.DIR_RIGHT.clone();
+
     const size = (options.size !== undefined) ? options.size : Entity.DEFAULT_SIZE;
-    this.graphic = ShapeFactory.getTriangle(size);
+
+    this.graphic = ShapeFactory.getTriangle(size, this.position.clone(), this.getRotation());
+    this.collider = new Collider(this.graphic.clone());
+  }
+
+  getRotation()
+  {
+    return this.forward.angleFromPositiveXAxis();
   }
 
   getTags()
@@ -67,7 +73,10 @@ class Entity
 
   move()
   {
-    return this.position.add(this.velocity);
+    this.position.add(this.velocity);
+    this.graphic.move(this.velocity);
+    this.collider.move(this.velocity);
+    return this;
   }
 
   setBehavior(b)
@@ -103,12 +112,22 @@ class Entity
 
   setPosition(p)
   {
+    this.graphic.setPosition(p);
+    this.collider.setPosition(p);
     return this.position = p;
   }
 
   getPosition()
   {
     return this.position;
+  }
+
+  setForward(forward)
+  {
+    this.forward = forward;
+    this.graphic.setRotation(this.getRotation());
+    this.collider.setRotation(this.getRotation());
+    return this.forward;
   }
 
   updateVelocity(v)
@@ -121,7 +140,7 @@ class Entity
     this.velocity.add(v).limit(this.maxSpeed);
 
     if (this.velocity.magnitude() !== 0)
-      this.forward = this.velocity.clone().normalize();
+      this.setForward(this.velocity.clone().normalize());
 
     return this.velocity;
   }
@@ -166,28 +185,34 @@ class Entity
     return this.mass = m;
   }
 
-  render(pos)
+  render(screenPos)
   {
-    const rotation = this.forward.angleFromPositiveXAxis();
-    this.graphic.render(pos, rotation, this.color);
+    const options = {
+      fill: this.color,
+      stroke: this.color
+    };
+
+    this.graphic.render(screenPos, options);
 
     if (window.DEBUG)
-      this.renderDebug(pos);
+      this.renderDebug(screenPos);
   }
 
-  renderDebug(pos)
+  renderDebug(screenPos)
   {
-    const forwardEnd = Vector.add(pos, this.forward.clone().scale(this.viewDistance));
-    DisplayUtils.drawLine(pos, forwardEnd, DisplayUtils.colorLookup.BLUE);
+    const forwardEnd = Vector.add(screenPos, this.forward.clone().scale(this.viewDistance));
+    DisplayUtils.drawLine(screenPos, forwardEnd, DisplayUtils.colorLookup.BLUE);
 
     const fovColor = DisplayUtils.colorLookup.PURPLE;
 
     const theta = this.fov * Math.PI / 180;
-    const leftFov = Vector.add(pos, this.forward.clone().rotate(theta / 2).scale(this.viewDistance));
-    DisplayUtils.drawLine(pos, leftFov, fovColor);
+    const leftFov = Vector.add(screenPos, this.forward.clone().rotate(theta / 2).scale(this.viewDistance));
+    DisplayUtils.drawLine(screenPos, leftFov, fovColor);
 
-    const rightFov = Vector.add(pos, this.forward.clone().rotate(-theta / 2).scale(this.viewDistance));
-    DisplayUtils.drawLine(pos, rightFov, fovColor);
+    const rightFov = Vector.add(screenPos, this.forward.clone().rotate(-theta / 2).scale(this.viewDistance));
+    DisplayUtils.drawLine(screenPos, rightFov, fovColor);
+
+    this.collider.render(screenPos);
   }
 
   getX()

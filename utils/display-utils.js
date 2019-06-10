@@ -32,18 +32,21 @@ class DisplayUtils
     pop();
   }
 
-  static translateAndDrawPolygon(vertices, color)
+  static drawPolygon(vertices, options={})
   {
     push();
-    fill(color);
-    stroke(color);
+
+    if (options.stroke !== undefined)
+      stroke(options.stroke);
+    if (options.fill !== undefined)
+      fill(options.fill);
 
     beginShape();
 
     for (let vert of vertices)
       vertex(vert.getX(), vert.getY());
 
-    endShape(CLOSE);
+    endShape();
     pop();
   }
 }

@@ -1,6 +1,6 @@
 class ShapeFactory
 {
-  static getTriangle(size=5)
+  static getTriangle(size=5, position, rotation)
   {
     const front = new Vector(size, 0);
     const bl = new Vector(-size, -size); // back left
@@ -9,6 +9,6 @@ class ShapeFactory
 
     const vertices = [ front, bl, br ];
 
-    return new Polygon(vertices);
+    return new Polygon(vertices, position, rotation);
   }
 }
